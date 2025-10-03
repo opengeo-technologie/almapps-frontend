@@ -1,0 +1,244 @@
+<form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div>
+      <div class="col s12 m12">
+        <div class="row">
+          <h5>General informations</h5>
+          <div class="col s12 m6">
+            <!-- Client type -->
+            <div class="form-input">
+              <label for="name">Type <span class="red-text">(*)</span></label>
+              <select
+                class="browser-default"
+                name="type"
+                [(ngModel)]="client.type"
+                [compareWith]="compareFn"
+                required
+                (change)="selectType($event)"
+              >
+                <option [ngValue]="null" disabled>Select company type</option>
+                <option *ngFor="let item of types" [ngValue]="item">
+                  {{ item.type }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Client name -->
+            <div class="form-input">
+              <label for="name"
+                >Client name <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  required
+                  name="name"
+                  [(ngModel)]="client.name"
+                  placeholder="Client name"
+                  #name="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client address -->
+            <div class="form-input">
+              <label for="address"
+                >Client address <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address"
+                  required
+                  name="address"
+                  [(ngModel)]="client.address"
+                  placeholder="Client address"
+                  #address="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client email -->
+            <div class="form-input">
+              <label for="email"
+                >Client email <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  required
+                  name="email"
+                  [(ngModel)]="client.email"
+                  placeholder="Client email"
+                  #email="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6">
+            <!-- Client phone -->
+            <div class="form-input">
+              <label for="phone"
+                >Client phone number <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  required
+                  [(ngModel)]="client.phone"
+                  placeholder="Client phone"
+                  #phone="ngModel"
+                />
+              </div>
+            </div>
+            <!-- Client P.O box -->
+            <div class="form-input">
+              <label for="postal">Client P.O box</label>
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="postal"
+                  name="postal"
+                  [(ngModel)]="client.postal"
+                  placeholder="Client postal"
+                  #postal="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client nui -->
+            <div class="form-input">
+              <label for="nui"
+                >Client Unique identification number (NUI)
+              </label>
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nui"
+                  name="nui"
+                  [(ngModel)]="client.nui"
+                  placeholder="Client nui"
+                  #nui="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client rc -->
+            <div class="form-input">
+              <label for="rc">Client Commercial register number (RC) </label>
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="rc"
+                  name="rc"
+                  [(ngModel)]="client.rc"
+                  placeholder="Client rc"
+                  #rc="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 m12" *ngIf="isCompany">
+        <hr />
+        <h5>Person of contact informations</h5>
+        <div class="col s12 m6">
+          <!-- Contact name -->
+          <div class="form-input">
+            <label for="contact_name"
+              >Contact name <span class="red-text">(*)</span></label
+            >
+            <div class="input-field">
+              <input
+                type="text"
+                class="form-control"
+                id="contact_name"
+                required
+                name="contact_name"
+                [(ngModel)]="contact.name"
+                placeholder="Contact name"
+                #contact_name="ngModel"
+              />
+            </div>
+          </div>
+
+          <!-- Contact email -->
+          <div class="form-input">
+            <label for="contact_email"
+              >Contact email <span class="red-text">(*)</span></label
+            >
+            <div class="input-field">
+              <input
+                type="email"
+                class="form-control"
+                id="contact_email"
+                name="contact_email"
+                required
+                [(ngModel)]="contact.email"
+                placeholder="Contact email"
+                #contact_email="ngModel"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <!-- Contact name -->
+          <div class="form-input">
+            <label for="contact_phone">Contact phone number</label>
+            <div class="input-field">
+              <input
+                type="text"
+                class="form-control"
+                id="contact_phone"
+                pattern="^[a-zA-Z0-9àéèç ]{1,100}$"
+                name="contact_phone"
+                [(ngModel)]="contact.phone"
+                placeholder="Contact phone"
+                #contact_phone="ngModel"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="divider"></div>
+
+      <div class="col s12 m12 center">
+        <hr />
+        <button
+          type="submit"
+          *ngIf="isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          <i class="material-icons">save</i>
+          Save
+        </button>
+
+        <button
+          type="submit"
+          *ngIf="!isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+<h3 *ngIf="!client" class="center"></h3>

@@ -1,0 +1,42 @@
+<!-- Sidebar navigation -->
+<ul id="slide-out" class="sidenav sidenav-fixed">
+  <li>
+    <div class="user-view">
+      <div class="background">
+        <img src="../../assets/images/office.jpeg" />
+      </div>
+      <a href="#user"
+        ><img class="circle" src="../../assets/images/user.jpeg"
+      /></a>
+      <a href="#name"><span class="white-text name">DJATIO</span></a>
+      <a href="#email"
+        ><span
+          class="white-text email"
+          [innerHTML]="'stephanedjatio@gmail.com'"
+        ></span
+      ></a>
+    </div>
+  </li>
+  <li class="red">
+    <a href="/menu" class="waves-effect white-text">
+      <i><img src="../../../assets/css/flaticon/svg/turn-back.svg" alt="" /></i
+      >Back to main menu
+    </a>
+  </li>
+  <li><div class="divider"></div></li>
+  @if (submenus) {
+  <li *ngFor="let item of submenus">
+    <a
+      [href]="item.url"
+      class="waves-effect"
+      [class.active]="activeLink === item.url"
+    >
+      <i
+        ><img
+          [src]="'../../../assets/css/flaticon/svg/' + item.icon"
+          alt="" /></i
+      >{{ item.name }}
+    </a>
+  </li>
+  }
+</ul>

@@ -1,0 +1,87 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div *ngIf="client" class="row">
+    <div class="col s12 m8 offset-m2">
+      <h5 class="header center">{{ client.name }}</h5>
+      <div class="card horizontal hoverable">
+        <!-- <div class="card-image">
+                <img [src]="pokemon.picture">
+            </div> -->
+        <div class="card-stacked">
+          <div class="card-content">
+            <table class="bordered striped">
+              <tbody>
+                <tr>
+                  <td>Client name</td>
+                  <td>
+                    <strong>{{ client.name }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Client address</td>
+                  <td>
+                    <strong>{{ client.address }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Client P.O Box</td>
+                  <td>
+                    <strong>{{ client.postal }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Client NUI</td>
+                  <td>
+                    <strong>{{ client.nui }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Client RC</td>
+                  <td>
+                    <strong>{{ client.rc }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Client type</td>
+                  <td>
+                    <strong>{{ client.type.type }}</strong>
+                  </td>
+                </tr>
+                <tr *ngIf="client.type.id == 2">
+                  <td>Client contact</td>
+                  <td>
+                    <strong>{{ client.name }}</strong>
+                  </td>
+                </tr>
+                <tr *ngIf="client.type.id == 2">
+                  <td>Client contact email</td>
+                  <td>
+                    <strong>{{ client.email }}</strong>
+                  </td>
+                </tr>
+                <tr *ngIf="client.type.id == 2">
+                  <td>Client contact phone number</td>
+                  <td>
+                    <strong>{{ client.phone }}</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-action">
+            <a class="waves-effect waves-light" (click)="returnClientList()"
+              >Back</a
+            >
+            <a
+              class="waves-effect waves-light blue-text blue-text"
+              (click)="editClient(client)"
+              >Edit</a
+            >
+            <!-- <a class="waves-effect waves-light red-text">Delete</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h4 *ngIf="!client" class="center">Aucun Client à afficher !</h4>
+</main>

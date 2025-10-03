@@ -1,0 +1,57 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div *ngIf="vendor" class="row">
+    <div class="col s12 m8 offset-m2">
+      <h5 class="header center">{{ vendor.name }}</h5>
+      <div class="card horizontal hoverable">
+        <!-- <div class="card-image">
+                <img [src]="pokemon.picture">
+            </div> -->
+        <div class="card-stacked">
+          <div class="card-content">
+            <table class="bordered striped">
+              <tbody>
+                <tr>
+                  <td>Vendor name</td>
+                  <td>
+                    <strong>{{ vendor.name }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Vendor address</td>
+                  <td>
+                    <strong>{{ vendor.address }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Vendor email</td>
+                  <td>
+                    <strong>{{ vendor.email }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Vendor phone number</td>
+                  <td>
+                    <strong>{{ vendor.phone }}</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-action">
+            <a class="waves-effect waves-light" (click)="returnClientList()"
+              >Back</a
+            >
+            <a
+              class="waves-effect waves-light blue-text blue-text"
+              (click)="editVendor(vendor)"
+              >Edit</a
+            >
+            <!-- <a class="waves-effect waves-light red-text">Delete</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h4 *ngIf="!vendor" class="center">Aucun Client à afficher !</h4>
+</main>

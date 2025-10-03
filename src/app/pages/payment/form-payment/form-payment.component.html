@@ -1,0 +1,188 @@
+<form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div>
+      <div class="col s12 m12">
+        <div class="row">
+          <h5 class="center">General informations</h5>
+          <hr />
+          <div class="col s12 m6">
+            <!-- Years -->
+            <div class="form-input">
+              <label for="year">Year <span class="red-text">(*)</span></label>
+              <select
+                class="browser-default"
+                name="year"
+                id="year"
+                [(ngModel)]="selected_year_invoice"
+                required
+              >
+                <option [ngValue]="null" disabled>Select year</option>
+                <option *ngFor="let item of years" [ngValue]="item">
+                  {{ item }}
+                </option>
+              </select>
+            </div>
+            <!-- Invoices -->
+            <div class="form-input">
+              <label for="client"
+                >Invoice <span class="red-text">(*)</span></label
+              >
+              <select
+                class="browser-default"
+                name="client"
+                id="client"
+                [(ngModel)]="invoice_selected"
+                [compareWith]="compareClient"
+                (change)="changeInvoice()"
+                required
+              >
+                <option [ngValue]="null" disabled>Select invoice</option>
+                <option
+                  *ngFor="let item of getFilteredInvoices"
+                  [ngValue]="item"
+                >
+                  {{ item.reference }} ({{ item.client.name }})
+                </option>
+              </select>
+            </div>
+
+            <div class="form-input">
+              <label for="invoice_amount"
+                >Invoice bill <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="invoice_amount"
+                  name="invoice_amount"
+                  currencyFormat="XAF"
+                  [(ngModel)]="billing_amount"
+                  #invoice_amount="ngModel"
+                  readonly
+                />
+              </div>
+            </div>
+
+            <div class="form-input">
+              <label for="amount"
+                >Amount Paid<span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="amount"
+                  name="amount"
+                  [max]="maxAmount"
+                  currencyFormat="XAF"
+                  [(ngModel)]="payment.amount"
+                  #amount="ngModel"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6">
+            <!-- Currencies -->
+            <div class="form-input">
+              <label for="currency"
+                >Currency <span class="red-text">(*)</span></label
+              >
+              <select
+                class="browser-default"
+                name="currency"
+                id="currency"
+                [(ngModel)]="payment.currency"
+                [compareWith]="compareFn"
+                required
+              >
+                <option [ngValue]="null" disabled>Select currency</option>
+                <option *ngFor="let item of currencies" [ngValue]="item">
+                  {{ item.value }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Quotation type -->
+            <div class="form-input">
+              <label for="type"
+                >Payment method <span class="red-text">(*)</span></label
+              >
+              <select
+                class="browser-default"
+                name="type"
+                id="type"
+                [(ngModel)]="payment.type"
+                [compareWith]="compareFn"
+                [disabled]="!isAddForm"
+                required
+              >
+                <option [ngValue]="null" disabled>Select method</option>
+                <option *ngFor="let item of types" [ngValue]="item">
+                  {{ item.method }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Date of operation -->
+            <div class="form-input">
+              <label for="date_op"
+                >Date operation <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="date"
+                  class="form-control"
+                  id="date_op"
+                  name="date_op"
+                  [(ngModel)]="payment.date_op"
+                  #date_op="ngModel"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-input">
+              <label for="file_path">Justification </label>
+              <div class="input-field">
+                <input
+                  type="file"
+                  class="form-control"
+                  id="file_path"
+                  name="file_path"
+                  [(ngModel)]="payment.file_path"
+                  #file_path="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="divider"></div>
+
+      <div class="col s12 m12 center">
+        <hr />
+        <button
+          type="submit"
+          *ngIf="isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          <i class="material-icons">save</i>
+          Save
+        </button>
+
+        <button
+          type="submit"
+          *ngIf="!isAddForm"
+          class="waves-effect waves-light btn"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

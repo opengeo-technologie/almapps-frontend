@@ -1,1 +1,111 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  overflow-y: scroll;
+}
+
+main {
+  padding-top: 0;
+}
+
+/* Ombre + z-index au besoin (Materialize gère déjà, mais au cas où) */
+nav {
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-group {
+  position: relative;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.btn-group > .btn:first-child:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-group > .btn:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btn-group > .btn-inactive {
+  background-color: #607d8b;
+}
+
+.btn-group > .btn {
+  -webkit-box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0),
+    0 0px 0px 0px rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0px rgba(0, 0, 0, 0),
+    0 0px 0px 0 rgba(0, 0, 0, 0);
+}
+
+.btn-group > .btn-inactive:hover {
+  background-color: #728f9d;
+}
+
+.disabled-link {
+  pointer-events: none; /* Disable click events */
+  color: gray; /* Change color to indicate it's disabled */
+  text-decoration: none; /* Remove underline */
+  cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+}
+
+.btn-group > .btn:hover {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Style Materialize custom select */
+.select-wrapper input.select-dropdown {
+  border: 2px solid #2196f3 !important;
+  border-radius: 8px !important;
+  height: 30px !important;
+  line-height: 50px !important;
+  /* padding: 0 12px !important; */
+  font-size: 12px !important;
+  background-color: #fff !important;
+}
+
+/* Dropdown focus effect */
+.select-wrapper input.select-dropdown:focus {
+  border-color: #0d47a1 !important;
+  box-shadow: 0 0 5px rgba(33, 150, 243, 0.5) !important;
+}
+
+[type="checkbox"].filled-in:not(:checked) + span:not(.lever):after {
+  height: 15px;
+  width: 15px;
+  margin-top: 7px;
+  background-color: transparent;
+  border: 2px solid #5a5a5a;
+  top: 0px;
+  z-index: 0;
+}
+
+[type="checkbox"].filled-in:checked + span:not(.lever):after {
+  top: 3px;
+  left: 3px;
+  height: 15px;
+  width: 15px;
+  border: 2px solid #1976d2;
+  background-color: #1976d2;
+}
+
+[type="checkbox"] + span:not(.lever) {
+  font-weight: bolder;
+  color: #5a5a5a;
+}
+
+input[readonly] {
+  background-color: #f0f0f0; /* gray background */
+  cursor: not-allowed; /* show disabled cursor */
+}

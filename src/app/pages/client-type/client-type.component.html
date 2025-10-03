@@ -1,0 +1,114 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col s12 m12">
+      <a
+        class="waves-effect waves-light btn-small light-blue darken-4"
+        href="/admin/type-client/add"
+        ><i class="material-icons left">add_circle</i>New type client</a
+      >
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title">Type of Clients</span>
+          <div class="divider"></div>
+          <div>
+            <table class="highlight centered responsive-table">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Type name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody class="center">
+                <tr *ngFor="let typeClient of paginatedData">
+                  <td>{{ typeClient.id }}</td>
+                  <td>{{ typeClient.type }}</td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <a
+                        class="waves-effect waves-light btn btn-small"
+                        title="Edit client type"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4"
+                        title="Delete client type"
+                        *ngIf="typeClient.client_count == 0"
+                        ><i class="material-icons">delete</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4 disabled-link"
+                        title="Delete client type"
+                        *ngIf="typeClient.client_count != 0"
+                        ><i class="material-icons">delete</i></a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!-- Pagination Controls -->
+            <div class="center" style="padding-top: 20px">
+              <button
+                (click)="prevPage()"
+                class="btn waves-effect waves-light light-blue darken-4 btn-small"
+                [disabled]="currentPage === 1"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/left-chevron.svg"
+                  alt=""
+                  style="height: 25px; margin-top: 3px"
+                />
+              </button>
+              <span
+                class="page-number"
+                style="margin-left: 10px; margin-right: 10px"
+                >{{ currentPage }} / {{ totalPages() }}</span
+              >
+              <button
+                (click)="nextPage()"
+                class="btn waves-effect waves-light light-blue darken-4 btn-small"
+                [disabled]="currentPage === totalPages()"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/right-chevron.svg"
+                  alt=""
+                  style="height: 24px; margin-top: 3px"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Structure -->
+  <!-- <div id="confirmDelete" class="modal">
+    <div class="modal-content">
+      <h4 class="center red-text">Do you really want to delete this client type? </h4>
+      <form #deleteMotivationForm="ngForm" (ngSubmit)="deleteClientType()">
+        <div class="form-group">
+            <label for="name">Reason : </label>
+            <input type="text" class="form-control" id="comment"
+                    required
+                [(ngModel)]="motifOndelete" name="comment"
+                placeholder="Write comment"
+                #jobName="ngModel">
+    
+            <span [hidden]="jobName.valid || jobName.pristine"
+                class="red-text accent-1">
+                Enter the reason for deletion.
+            </span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-close waves-effect waves-green btn-flat red left white-text" (click)="closeModal()">No</button>
+            <button type="submit" class="modal-close waves-effect waves-green btn-flat right green white-text" [disabled]="!deleteMotivationForm.form.valid">Yes</button>
+          </div>
+      </form>
+    </div>
+    
+</div> -->
+</main>

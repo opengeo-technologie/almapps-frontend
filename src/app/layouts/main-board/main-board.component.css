@@ -1,0 +1,13 @@
+.card {
+  height: 150px;
+  /* width: 250px; */
+}
+
+.card img {
+  height: 70px;
+  padding-top: 25px;
+}
+
+.card h5 {
+  font-size: 18px;
+}

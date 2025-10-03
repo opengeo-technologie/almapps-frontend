@@ -1,0 +1,8 @@
+.menu-list {
+  justify-content: center; /* horizontal center */
+  align-items: center; /* vertical center */
+  flex-wrap: wrap; /* allow multiple cards per row */
+  gap: 20px; /* spacing between cards */
+  height: 100vh; /* full screen height */
+  margin-top: 100px;
+}

@@ -1,0 +1,100 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div *ngIf="product" class="row">
+    <div class="col s12 m8 offset-m2">
+      <h5 class="header center">{{ product.name }}</h5>
+      <div class="card horizontal hoverable">
+        <!-- <div class="card-image">
+                <img [src]="pokemon.picture">
+            </div> -->
+        <div class="card-stacked">
+          <div class="card-content">
+            <table class="bordered striped">
+              <tbody>
+                <tr>
+                  <td>Product name</td>
+                  <td>
+                    <strong>{{ product.name }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Product description</td>
+                  <td>
+                    <strong>{{ product.description }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Product unit</td>
+                  <td>
+                    <strong>{{ product.unit }}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Stock</td>
+                  <td>
+                    <strong>{{ product.stock_security_level }}</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr />
+            <div id="products-input">
+              <h5 class="center">
+                Latest products inputs ( top 5 )
+                <span><a href="#">More details</a></span>
+              </h5>
+              <table class="highlight centered responsive-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Vendor</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="4">No data available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <hr />
+            <div id="products-output">
+              <h5 class="center">
+                Latest products removal ( top 5 )
+                <span><a href="#">More details</a></span>
+              </h5>
+              <table class="highlight centered responsive-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="3">No data available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-action">
+            <a class="waves-effect waves-light" (click)="returnProductList()"
+              >Back</a
+            >
+            <a
+              class="waves-effect waves-light blue-text blue-text"
+              (click)="editProduct(product)"
+              >Edit</a
+            >
+            <!-- <a class="waves-effect waves-light red-text">Delete</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h4 *ngIf="!product" class="center">Aucun Client à afficher !</h4>
+</main>

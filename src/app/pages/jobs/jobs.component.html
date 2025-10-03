@@ -1,0 +1,463 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col s12 m12">
+      <a
+        class="waves-effect waves-light btn-small light-blue darken-4"
+        (click)="newJob()"
+        ><i class="left"
+          ><img
+            src="../../../assets/css/flaticon/svg/new-task.svg"
+            alt=""
+            style="height: 30px; padding-top: 5px" /></i
+        >New Job</a
+      >
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title">Jobs</span>
+          <div class="divider"></div>
+          <div>
+            <table class="highlight centered responsive-table">
+              <thead>
+                <tr>
+                  <th>Job</th>
+                  <th>Description</th>
+                  <th>Duration</th>
+                  <th>Date Program</th>
+                  <th>Price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="paginatedData.length != 0">
+                <tr *ngFor="let item of paginatedData">
+                  <td>{{ item.job_name }}</td>
+                  <td>{{ item.job_description }}</td>
+                  <td>{{ item.duration }} hours</td>
+                  <td>{{ item.date_program | date : "dd-MM-YYYY" }}</td>
+                  <td>{{ item.price }} FCFA</td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <a
+                        class="waves-effect waves-light btn btn-small"
+                        title="Edit"
+                        (click)="edit(item)"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small blue"
+                        title="Assign technicians"
+                        (click)="assignTech(item)"
+                        ><i class="material-icons">assignment_ind</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small green"
+                        title="Validate job"
+                        (click)="edit(item)"
+                        ><i class="material-icons">check_circle</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4"
+                        title="Delete"
+                        (click)="confirmDelete(item)"
+                        ><i class="material-icons">delete</i></a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="paginatedData.length == 0">
+                <tr>
+                  <td colspan="4">
+                    <i class="center">No data available</i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="center" style="padding-top: 20px">
+              <button
+                (click)="prevPage()"
+                class="btn waves-effect waves-light white darken-4 btn-small"
+                [disabled]="currentPage === 1"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/left-chevron.svg"
+                  alt=""
+                  style="height: 25px; margin-top: 3px"
+                />
+              </button>
+              <span
+                class="page-number"
+                style="margin-left: 10px; margin-right: 10px"
+                >{{ currentPage }} / {{ totalPages() }}</span
+              >
+              <button
+                (click)="nextPage()"
+                class="btn waves-effect waves-light white btn-small"
+                [disabled]="currentPage === totalPages()"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/right-chevron.svg"
+                  alt=""
+                  style="height: 24px; margin-top: 3px"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal add & edit job -->
+  <div id="new_edit_job" class="modal">
+    <div class="modal-content">
+      <h4 class="center blue white-text">New job</h4>
+      <form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div>
+            <div class="col s12 m12">
+              <div class="row">
+                <div class="col s12 m12">
+                  <!-- Job name -->
+                  <div class="form-input">
+                    <label for="name"
+                      >Job name <span class="red-text">(*)</span></label
+                    >
+                    <div class="input-field">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        required
+                        name="name"
+                        [(ngModel)]="job.job_name"
+                        placeholder="Job name"
+                        #email="ngModel"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Job description -->
+                  <div class="form-input">
+                    <label for="description"
+                      >Job description <span class="red-text">(*)</span></label
+                    >
+                    <div class="input-field">
+                      <textarea
+                        class="materialize-textarea custom-textarea"
+                        id="description"
+                        name="description"
+                        required
+                        [(ngModel)]="job.job_description"
+                        placeholder="Job description"
+                        #phone="ngModel"
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <!-- Job duration -->
+                  <div class="form-input">
+                    <label for="duration"
+                      >Duration <span class="red-text">(*)</span></label
+                    >
+                    <div class="input-field">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="duration"
+                        name="duration"
+                        [(ngModel)]="job.duration"
+                        placeholder="Duration"
+                        #phone="ngModel"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Job price -->
+                  <div class="form-input">
+                    <label for="price"
+                      >Price <span class="red-text">(*)</span></label
+                    >
+                    <div class="input-field">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="price"
+                        name="price"
+                        [(ngModel)]="job.price"
+                        placeholder="Price"
+                        #phone="ngModel"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Job price -->
+                  <div class="form-input">
+                    <label for="date_program"
+                      >Date programmed <span class="red-text">(*)</span></label
+                    >
+                    <div class="input-field">
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="date_program"
+                        name="date_program"
+                        [(ngModel)]="job.date_program"
+                        placeholder="Date programmed"
+                        #phone="ngModel"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit button -->
+            <div class="divider"></div>
+
+            <div class="col s12 m12 center">
+              <hr />
+              <button
+                type="submit"
+                class="waves-effect waves-light btn"
+                [disabled]="!clientForm.form.valid"
+                *ngIf="isAddForm"
+              >
+                <i class="material-icons">save</i>
+                Save
+              </button>
+              <button
+                type="submit"
+                class="waves-effect waves-light btn amber"
+                [disabled]="!clientForm.form.valid"
+                *ngIf="!isAddForm"
+              >
+                <i class="material-icons">save</i>
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal assign technicians -->
+  <div id="assign_tech" class="modal">
+    <div class="modal-content">
+      <h4 class="center blue white-text">Assign technicians</h4>
+      <div class="row">
+        <div>
+          <div class="col s12 m12">
+            <div class="row">
+              <div class="col s12 m12">
+                <h5 class="center">Job</h5>
+                <!-- Job duration -->
+                <div class="form-input">
+                  <label for="job_id"
+                    >Job ID <span class="red-text">(*)</span></label
+                  >
+                  <div class="input-field">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="job_id"
+                      name="job_id"
+                      readonly
+                      [(ngModel)]="job.id"
+                      #phone="ngModel"
+                      required
+                    />
+                  </div>
+                </div>
+                <!-- Job name -->
+                <div class="form-input">
+                  <label for="name"
+                    >Job name <span class="red-text">(*)</span></label
+                  >
+                  <div class="input-field">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="name"
+                      required
+                      readonly
+                      name="name"
+                      [(ngModel)]="job.job_name"
+                      placeholder="Job name"
+                      #email="ngModel"
+                    />
+                  </div>
+                </div>
+                <hr />
+                <h5 class="center">Technicians</h5>
+                <form
+                  #technicianAssignForm="ngForm"
+                  (ngSubmit)="addTechnicianToList()"
+                >
+                  <div
+                    class="col m5 s12"
+                    style="border: 2px solid #757575; min-height: 100px"
+                  >
+                    <div class="form-input">
+                      <label for="name"
+                        >Technicians <span class="red-text">(*)</span></label
+                      >
+                      <select
+                        class="browser-default"
+                        name="type"
+                        [(ngModel)]="assign_tech.technician"
+                        [compareWith]="compareFn"
+                        required
+                      >
+                        <option [ngValue]="null" disabled>
+                          Select technician
+                        </option>
+                        <option
+                          *ngFor="let item of filteredTechnicians"
+                          [ngValue]="item"
+                        >
+                          {{ item.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <!-- Tech start date -->
+                    <div class="form-input">
+                      <label for="start_date"
+                        >Start date <span class="red-text">(*)</span></label
+                      >
+                      <div class="input-field">
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="start_date"
+                          name="start_date"
+                          [(ngModel)]="assign_tech.date_start"
+                          #phone="ngModel"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <!-- Tech en date -->
+                    <div class="form-input">
+                      <label for="date_end"
+                        >End date <span class="red-text">(*)</span></label
+                      >
+                      <div class="input-field">
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="date_end"
+                          required
+                          name="date_end"
+                          [(ngModel)]="assign_tech.date_end"
+                          #email="ngModel"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col m2 s12">
+                    <button
+                      type="submit"
+                      class="waves-effect waves-light btn btn-small brown darken-3"
+                      [disabled]="!technicianAssignForm.form.valid"
+                    >
+                      <i class="material-icons">compare_arrows</i>
+                      Assign
+                    </button>
+                  </div>
+                </form>
+
+                <div
+                  class="col m5 s12"
+                  style="border: 2px solid #757575; min-height: 100px"
+                >
+                  <h5 class="center">Assigned technicians</h5>
+                  <ul>
+                    <li *ngFor="let item of assignedTechnicians; let i = index">
+                      <div class="row" style="margin-bottom: 5px">
+                        <div class="col m8 s8">
+                          {{ i + 1 }}. {{ item.name }}
+                        </div>
+                        <div class="col m2 s2">
+                          <a
+                            class="btn-flat red-text"
+                            (click)="removeTechnicianToList(item)"
+                            ><i class="material-icons">delete_forever</i></a
+                          >
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <div class="divider"></div>
+
+          <div class="col s12 m12 center">
+            <hr />
+            <button
+              type="button"
+              class="waves-effect waves-light btn green darken-3"
+              [disabled]="invalidBtn()"
+              (click)="onSubmitAssignTechnicians(job)"
+            >
+              <i class="material-icons">check_circle</i>
+              Validate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal delete job -->
+  <div id="confirmDelete" class="modal">
+    <div class="modal-content">
+      <h4 class="center red-text">Do you really want to delete this vendor?</h4>
+      <p *ngIf="jobToDelete" class="center teal-text darken-4">
+        {{ jobToDelete.name }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="deleteJob()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+</main>

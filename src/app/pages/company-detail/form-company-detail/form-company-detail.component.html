@@ -1,0 +1,307 @@
+<form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div>
+      <div class="col s12 m12">
+        <div class="row">
+          <div class="col s12 m6">
+            <h5 class="center">General informations</h5>
+            <!-- Client name -->
+            <div class="form-input">
+              <label for="name"
+                >Company name <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  required
+                  name="name"
+                  [(ngModel)]="company.name"
+                  placeholder="Company name"
+                  #name="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client address -->
+            <div class="form-input">
+              <label for="address"
+                >Company address <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address"
+                  required
+                  name="address"
+                  [(ngModel)]="company.address"
+                  placeholder="Company address"
+                  #address="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client email -->
+            <div class="form-input">
+              <label for="email"
+                >Company email <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  required
+                  name="email"
+                  [(ngModel)]="company.email"
+                  placeholder="Company email"
+                  #email="ngModel"
+                />
+              </div>
+            </div>
+
+            <div class="form-input">
+              <label for="phone">Company phone number</label>
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  [(ngModel)]="company.phone"
+                  placeholder="Company phone"
+                  #phone="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client Po box -->
+            <div class="form-input">
+              <label for="po_box"
+                >Company PO Box <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="po_box"
+                  name="po_box"
+                  [(ngModel)]="company.po_box"
+                  placeholder="Company PO Box"
+                  #po_box="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client nui -->
+            <div class="form-input">
+              <label for="nui"
+                >Company Unique identification number (NUI)
+              </label>
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nui"
+                  name="nui"
+                  [(ngModel)]="company.nui"
+                  placeholder="Company nui"
+                  #nui="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Client rc -->
+            <div class="form-input">
+              <label for="rc">Company Commercial register number (RC) </label>
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="rc"
+                  name="rc"
+                  [(ngModel)]="company.rc"
+                  placeholder="Company rc"
+                  #rc="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m6">
+            <h5 class="center">Bank informations</h5>
+            <div class="form-input">
+              <label for="bank_name"
+                >Bank name <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="bank_name"
+                  name="bank_name"
+                  [(ngModel)]="company.bank_name"
+                  placeholder="Bank name"
+                  #name="ngModel"
+                />
+              </div>
+            </div>
+
+            <div class="form-input">
+              <label for="bank_iban"
+                >Bank IBAN <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="bank_iban"
+                  name="bank_iban"
+                  [(ngModel)]="company.bank_iban"
+                  placeholder="Bank IBAN"
+                  #name="ngModel"
+                />
+              </div>
+            </div>
+
+            <div class="form-input">
+              <label for="bank_swift_code"
+                >Bank Swift Code <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="bank_swift_code"
+                  name="bank_swift_code"
+                  [(ngModel)]="company.bank_swift_code"
+                  placeholder="Bank Swift Code"
+                  #name="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 m12" *ngIf="isCompany">
+        <hr />
+        <h5>Person of contact informations</h5>
+        <div class="col s12 m6">
+          <!-- Contact name -->
+          <div class="form-input">
+            <label for="contact_name"
+              >Contact name <span class="red-text">(*)</span></label
+            >
+            <div class="input-field">
+              <input
+                type="text"
+                class="form-control"
+                id="contact_name"
+                required
+                name="contact_name"
+                [(ngModel)]="company.contact_name"
+                placeholder="Contact name"
+                #contact_name="ngModel"
+              />
+            </div>
+          </div>
+
+          <!-- Contact email -->
+          <div class="form-input">
+            <label for="contact_email1"
+              >Main Contact email 1<span class="red-text">(*)</span></label
+            >
+            <div class="input-field">
+              <input
+                type="email"
+                class="form-control"
+                id="contact_email1"
+                name="contact_email1"
+                required
+                [(ngModel)]="company.contact_email1"
+                placeholder="Contact email"
+                #contact_email="ngModel"
+              />
+            </div>
+          </div>
+          <div class="form-input">
+            <label for="contact_email2"
+              >Secondary Contact email<span class="red-text">(*)</span></label
+            >
+            <div class="input-field">
+              <input
+                type="email"
+                class="form-control"
+                id="contact_email2"
+                name="contact_email2"
+                [(ngModel)]="company.contact_email2"
+                placeholder="Contact email"
+                #contact_email1="ngModel"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <!-- Contact name -->
+          <div class="form-input">
+            <label for="contact_phone1">Main Contact phone number</label>
+            <div class="input-field">
+              <input
+                type="text"
+                class="form-control"
+                id="contact_phone1"
+                name="contact_phone1"
+                [(ngModel)]="company.contact_phone1"
+                placeholder="Contact phone"
+                #contact_phone1="ngModel"
+              />
+            </div>
+          </div>
+
+          <div class="form-input">
+            <label for="contact_phone2">Secondary Contact phone number</label>
+            <div class="input-field">
+              <input
+                type="text"
+                class="form-control"
+                id="contact_phone2"
+                name="contact_phone2"
+                [(ngModel)]="company.contact_phone2"
+                placeholder="Contact phone"
+                #contact_phone2="ngModel"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="divider"></div>
+
+      <div class="col s12 m12 center">
+        <hr />
+        <button
+          type="submit"
+          *ngIf="isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          <i class="material-icons">save</i>
+          Save
+        </button>
+
+        <button
+          type="submit"
+          *ngIf="!isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+<h3 *ngIf="!company" class="center"></h3>

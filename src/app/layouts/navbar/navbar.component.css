@@ -1,0 +1,21 @@
+nav {
+  /* height: 80px; */
+  background-color: #448aff;
+}
+
+nav img {
+  height: 45px;
+  width: 200px;
+  margin-top: 10px;
+}
+
+.hide-on-med-and-down {
+  padding-top: 5px;
+}
+
+.hide-on-med-and-down a {
+  font-size: 35px;
+  font-weight: bolder;
+  font-style: oblique;
+  text-transform: uppercase;
+}

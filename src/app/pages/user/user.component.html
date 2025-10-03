@@ -1,0 +1,215 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col s12 m12">
+      <a
+        class="waves-effect waves-light btn-small light-blue darken-4"
+        href="/users/add"
+        ><i class="left"
+          ><img
+            src="../../../assets/css/flaticon/svg/follow.svg"
+            alt=""
+            style="height: 30px; padding-top: 5px" /></i
+        >New user</a
+      >
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title">Users</span>
+          <div class="divider"></div>
+          <div>
+            <table class="highlight centered responsive-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Profile</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="paginatedData.length != 0">
+                <tr *ngFor="let item of paginatedData">
+                  <td>{{ item.username }}</td>
+                  <td>{{ item.email }}</td>
+                  <td>{{ item.profile.name }}</td>
+                  <td *ngIf="item.is_active">
+                    <span
+                      class="new badge green"
+                      data-badge-caption="Active"
+                    ></span>
+                  </td>
+                  <td *ngIf="!item.is_active">
+                    <span
+                      class="new badge red"
+                      data-badge-caption="Blocked"
+                    ></span>
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <a
+                        class="waves-effect waves-light btn btn-small"
+                        title="Edit client"
+                        (click)="editClient(item)"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light green darken-4 btn btn-small"
+                        title="Activate account"
+                        *ngIf="!item.is_active"
+                        (click)="confirmStatusChange(item)"
+                        ><i class="material-icons">lock_open</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light amber darken-4 btn btn-small"
+                        title="Block account"
+                        *ngIf="item.is_active"
+                        (click)="confirmStatusChange(item)"
+                        ><i class="material-icons">lock</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small yellow darken-2"
+                        title="Reset password"
+                        (click)="confirmPasswordReset(item)"
+                        ><img
+                          src="../../../assets/css/flaticon/svg/reset-password.svg"
+                          alt=""
+                          style="height: 25px"
+                      /></a>
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4"
+                        title="Delete client"
+                        (click)="confirmDeleteClient(item)"
+                        ><i class="material-icons">delete</i></a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="paginatedData.length == 0">
+                <tr>
+                  <td colspan="4">
+                    <i class="center">No data available</i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="center" style="padding-top: 20px">
+              <button
+                (click)="prevPage()"
+                class="btn waves-effect waves-light white darken-4 btn-small"
+                [disabled]="currentPage === 1"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/left-chevron.svg"
+                  alt=""
+                  style="height: 25px; margin-top: 3px"
+                />
+              </button>
+              <span
+                class="page-number"
+                style="margin-left: 10px; margin-right: 10px"
+                >{{ currentPage }} / {{ totalPages() }}</span
+              >
+              <button
+                (click)="nextPage()"
+                class="btn waves-effect waves-light white btn-small"
+                [disabled]="currentPage === totalPages()"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/right-chevron.svg"
+                  alt=""
+                  style="height: 24px; margin-top: 3px"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="confirmDeleteModal" class="modal">
+    <div class="modal-content">
+      <h4 class="center red-text">Do you really want to delete this client?</h4>
+      <p *ngIf="userSelected" class="center teal-text darken-4">
+        {{ userSelected.username }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="changeUserStatus()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+
+  <div id="ChangeAccountStatusModal" class="modal">
+    <div class="modal-content" *ngIf="userSelected">
+      <h4 class="center red-text" *ngIf="userSelected.is_active">
+        Do you want to block user account?
+      </h4>
+      <h4 class="center green-text" *ngIf="!userSelected.is_active">
+        Do you want to activate user account?
+      </h4>
+      <p class="center teal-text darken-4">
+        {{ userSelected.username }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="changeUserStatus()"
+      >
+        Confirm
+      </button>
+    </div>
+  </div>
+
+  <div id="resetPwdModal" class="modal">
+    <div class="modal-content" *ngIf="userSelected">
+      <h4 class="center red-text">Reset current user password ?</h4>
+      <p class="center teal-text darken-4">
+        {{ userSelected.username }}
+      </p>
+      <p class="center teal-text darken-4">
+        Password reset to: <b class="black-text">Almapps2025!</b>
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="resetUserPassword()"
+      >
+        Confirm
+      </button>
+    </div>
+  </div>
+</main>

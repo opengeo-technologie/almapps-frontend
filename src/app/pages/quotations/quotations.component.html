@@ -1,0 +1,119 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col s12 m12">
+      <a
+        class="waves-effect waves-light btn-small light-blue darken-4"
+        href="/quotations/add"
+        ><i class="left"
+          ><img
+            src="../../../assets/css/flaticon/svg/new-task.svg"
+            alt=""
+            style="height: 30px; padding-top: 5px" /></i
+        >New quotations</a
+      >
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title">List of quotations</span>
+          <div class="divider"></div>
+          <div>
+            <table class="highlight centered responsive-table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Client</th>
+                  <th>Type of quotation</th>
+                  <th>Date of issue</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="paginatedData.length != 0">
+                <tr *ngFor="let item of paginatedData">
+                  <td>{{ item.reference }}</td>
+                  <td>{{ item.client.name }}</td>
+                  <td>{{ item.type.type }}</td>
+                  <td>{{ item.date_op | date : "dd-MM-YYYY" }}</td>
+                  <td>
+                    {{ item.amount | customCurrency : item.currency_used }}
+                  </td>
+                  <td *ngIf="item.status">
+                    <span
+                      class="new badge green"
+                      data-badge-caption="Validated"
+                    ></span>
+                  </td>
+                  <td *ngIf="!item.status">
+                    <span
+                      class="new badge amber"
+                      data-badge-caption="Pending"
+                    ></span>
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <a
+                        class="waves-effect waves-light btn btn-small"
+                        title="Edit purchase order"
+                        (click)="edit(item)"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small light-blue darken-3"
+                        title="Print purchase order"
+                        (click)="print(item)"
+                        ><i class="material-icons">print</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4"
+                        title="Delete client"
+                        (click)="confirmDelete(item)"
+                        ><i class="material-icons">delete</i></a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="paginatedData.length == 0">
+                <tr>
+                  <td colspan="8">
+                    <i class="center">No data available</i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="center" style="padding-top: 20px">
+              <button
+                (click)="prevPage()"
+                class="btn waves-effect waves-light white darken-4 btn-small"
+                [disabled]="currentPage === 1"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/left-chevron.svg"
+                  alt=""
+                  style="height: 25px; margin-top: 3px"
+                />
+              </button>
+              <span
+                class="page-number"
+                style="margin-left: 10px; margin-right: 10px"
+                >{{ currentPage }} / {{ totalPages() }}</span
+              >
+              <button
+                (click)="nextPage()"
+                class="btn waves-effect waves-light white btn-small"
+                [disabled]="currentPage === totalPages()"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/right-chevron.svg"
+                  alt=""
+                  style="height: 24px; margin-top: 3px"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

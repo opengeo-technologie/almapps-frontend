@@ -1,0 +1,21 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col m1"></div>
+    <div class="col s12 m10">
+      <div class="card hoverable">
+        <div class="card-content">
+          <div class="blue lighten-1 white-text">
+            <span class="card-title">Edit quotation</span>
+          </div>
+
+          <div class="divider"></div>
+          <app-form-quotation
+            *ngIf="quotation"
+            [quotation]="quotation"
+          ></app-form-quotation>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

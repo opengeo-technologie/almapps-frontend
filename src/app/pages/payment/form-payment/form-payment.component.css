@@ -1,0 +1,78 @@
+thead tr th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+}
+
+tbody tr td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+}
+
+h5 {
+  font-size: 15px;
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+.form-input {
+  margin-top: 10px;
+}
+
+.form-input label {
+  font-size: 13px;
+  margin-left: 4px;
+  color: #757575;
+}
+
+.form-input select {
+  height: 30px; /* fixed height */
+  border-radius: 5px;
+  margin-top: 2px;
+  padding-left: 10px;
+}
+/* Remove Materialize underline style and add rounded border */
+.input-field {
+  margin-top: 2px;
+  margin-bottom: 0 !important;
+}
+.input-field input[type="text"],
+.input-field input[type="password"],
+.input-field input[type="number"],
+.input-field input[type="date"],
+.input-field input[type="file"],
+.input-field input[type="email"] {
+  border: 1px solid #ccc; /* regular border */
+  border-radius: 5px; /* rounded edges */
+  padding: 0; /* spacing inside */
+  padding-left: 10px;
+  height: 30px; /* fixed height */
+  width: 98%;
+  box-shadow: none; /* remove default focus shadow */
+  color: #000000;
+}
+
+/* Focus effect */
+.input-field input[type="text"]:focus,
+.input-field input[type="password"]:focus,
+.input-field input[type="number"]:focus,
+.input-field input[type="date"]:focus,
+.input-field input[type="file"]:focus,
+.input-field input[type="email"]:focus {
+  border-color: #0288d1; /* highlight color */
+  box-shadow: 0 0 5px rgba(0, 121, 107, 0.4);
+}
+
+input:invalid {
+  border: 2px solid red;
+  background-color: #ffe5e5;
+}
+
+input:valid {
+  border: 2px solid green;
+}

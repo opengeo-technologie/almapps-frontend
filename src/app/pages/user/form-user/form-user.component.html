@@ -1,0 +1,112 @@
+<form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div>
+      <div class="col s12 m12">
+        <div class="row">
+          <h5>User informations</h5>
+          <div class="col s12 m12">
+            <div class="form-input">
+              <label for="profile"
+                >Role <span class="red-text">(*)</span></label
+              >
+              <select
+                class="browser-default searchable"
+                name="profile"
+                id="profile"
+                [(ngModel)]="user.profile"
+                [compareWith]="compareFn"
+                required
+              >
+                <option [ngValue]="null" disabled>Select profile</option>
+                <option *ngFor="let item of profiles" [ngValue]="item">
+                  {{ item.name }}
+                </option>
+              </select>
+            </div>
+            <!-- Product name -->
+            <div class="form-input">
+              <label for="name"
+                >User name <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  required
+                  name="name"
+                  [(ngModel)]="user.username"
+                  placeholder="User name"
+                  #name="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Product description -->
+            <div class="form-input">
+              <label for="email">Email <span class="red-text">(*)</span></label>
+              <div class="input-field">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  required
+                  name="email"
+                  [readOnly]="!isAddForm"
+                  [(ngModel)]="user.email"
+                  placeholder="User email"
+                  #email="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Product unit -->
+            <div class="form-input" *ngIf="isAddForm">
+              <label for="password"
+                >Default password<span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  required
+                  name="password"
+                  [(ngModel)]="user.password"
+                  placeholder="Default password"
+                  #password="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="divider"></div>
+
+      <div class="col s12 m12 center">
+        <hr />
+        <button
+          type="submit"
+          *ngIf="isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          <i class="material-icons">save</i>
+          Save
+        </button>
+
+        <button
+          type="submit"
+          *ngIf="!isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+<h3 *ngIf="!user" class="center"></h3>

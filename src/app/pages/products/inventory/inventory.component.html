@@ -1,0 +1,129 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col s12 m12">
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title">Generate inventory</span>
+          <div class="divider"></div>
+          <div class="row center">
+            <h4 class="center">Select period of report</h4>
+            <br />
+            <div class="col s12 m4">
+              <p>
+                <label>
+                  <input
+                    class="with-gap"
+                    name="group1"
+                    (change)="onSelectionChange($event)"
+                    type="radio"
+                    value="week"
+                  />
+                  <span>Weekly</span>
+                </label>
+              </p>
+            </div>
+            <div class="col s12 m4">
+              <p>
+                <label>
+                  <input
+                    class="with-gap"
+                    name="group1"
+                    type="radio"
+                    (change)="onSelectionChange($event)"
+                    value="month"
+                    checked
+                  />
+                  <span>Monthly</span>
+                </label>
+              </p>
+            </div>
+            <div class="col s12 m4">
+              <p>
+                <label>
+                  <input
+                    class="with-gap"
+                    name="group1"
+                    (change)="onSelectionChange($event)"
+                    type="radio"
+                    value="year"
+                  />
+                  <span>Yearly</span>
+                </label>
+              </p>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col s12 m3 form-input">
+              <label>Select products</label>
+              <select
+                multiple
+                id="select-products"
+                [(ngModel)]="selectedProducts"
+              >
+                <option value="all" selected>All</option>
+                <option *ngFor="let item of products" [value]="item">
+                  {{ item.name }}
+                </option>
+              </select>
+            </div>
+            <div class="col s12 m3 form-input">
+              <label>Select year</label>
+              <select
+                class="browser-default"
+                [(ngModel)]="selectedYear"
+                (change)="onYearOrMonthChange()"
+              >
+                <option *ngFor="let year of years" [value]="year">
+                  {{ year }}
+                </option>
+              </select>
+            </div>
+            <div
+              class="col s12 m3 form-input"
+              *ngIf="isMonthActive || isWeekActive"
+            >
+              <label>Select month</label>
+              <select
+                class="browser-default"
+                [(ngModel)]="selectedMonth"
+                (change)="onYearOrMonthChange()"
+              >
+                <option *ngFor="let month of months" [value]="month.value">
+                  {{ month.name }}
+                </option>
+              </select>
+            </div>
+            <div class="col s12 m3 form-input" *ngIf="isWeekActive">
+              <label>Select week</label>
+              <select class="browser-default" [(ngModel)]="selectedWeek">
+                <option value="null" selected disabled>Choose week</option>
+                <ng-container *ngFor="let group of groupedWeeks">
+                  <optgroup [label]="group.month">
+                    <option
+                      *ngFor="let week of group.weeks"
+                      value="{{ week | json }}"
+                    >
+                      {{ week.label }}
+                    </option>
+                  </optgroup>
+                </ng-container>
+              </select>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col s12 m12 center">
+              <a
+                (click)="generateInventory()"
+                class="btn btn-small blue darken-3"
+                ><i class="material-icons">print</i>Generate</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

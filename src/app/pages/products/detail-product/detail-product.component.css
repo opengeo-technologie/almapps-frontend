@@ -1,0 +1,28 @@
+h5 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#products-input thead tr th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #e0e0e0;
+}
+
+#products-input tbody tr td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #e0e0e0;
+}
+
+#products-output thead tr th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #e0e0e0;
+}
+
+#products-output tbody tr td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #e0e0e0;
+}

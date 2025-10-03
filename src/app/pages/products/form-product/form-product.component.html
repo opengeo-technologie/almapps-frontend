@@ -1,0 +1,115 @@
+<form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div>
+      <div class="col s12 m12">
+        <div class="row">
+          <h5>Product informations</h5>
+          <div class="col s12 m12">
+            <!-- Product name -->
+            <div class="form-input">
+              <label for="name"
+                >Product name <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  required
+                  name="name"
+                  [(ngModel)]="product.name"
+                  placeholder="Product name"
+                  #name="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Product description -->
+            <div class="form-input">
+              <label for="description"
+                >Product description <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="description"
+                  required
+                  name="description"
+                  [(ngModel)]="product.description"
+                  placeholder="Product description"
+                  #description="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Product unit -->
+            <div class="form-input">
+              <label for="unit"
+                >Product unit <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="unit"
+                  required
+                  name="unit"
+                  [(ngModel)]="product.unit"
+                  placeholder="Product unit"
+                  #email="ngModel"
+                />
+              </div>
+            </div>
+
+            <!-- Product initial stock level -->
+            <div class="form-input">
+              <label for="stock"
+                >Product initial stock level
+                <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="stock"
+                  name="stock"
+                  required
+                  [(ngModel)]="product.stock_security_level"
+                  placeholder="Product initial stock level"
+                  #phone="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="divider"></div>
+
+      <div class="col s12 m12 center">
+        <hr />
+        <button
+          type="submit"
+          *ngIf="isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          <i class="material-icons">save</i>
+          Save
+        </button>
+
+        <button
+          type="submit"
+          *ngIf="!isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+<h3 *ngIf="!product" class="center"></h3>
