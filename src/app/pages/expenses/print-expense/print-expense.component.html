@@ -1,0 +1,149 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col m1"></div>
+    <div class="col s12 m10">
+      <div class="card hoverable">
+        <div class="card-content">
+          <div class="blue lighten-1 white-text">
+            <span class="card-title center">Expense details</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="expense">
+    <div class="col s12 m12 center">
+      <button class="btn-small blue" (click)="generatePdf()">
+        <i class="material-icons">print</i>Print
+      </button>
+    </div>
+    <div class="col m1"></div>
+    <div class="col s12 m10">
+      <div
+        class="card hoverable"
+        style="border: 2px solid black"
+        #poDiv
+        id="purchaseOrder"
+      >
+        <div class="card-content">
+          <div class="row grey lighten-1 header-po">
+            <div class="col s4 m4">
+              <img
+                src="../../../../assets/images/almapps-logo.png"
+                style="height: 40px"
+                alt=""
+              />
+            </div>
+            <div class="col s8 m8 right-align"><h5>Expense report</h5></div>
+          </div>
+          <div class="row" style="font-size: 13px">
+            <div class="col s5 m5">
+              <!-- <p>{{ expense.company.name }}</p>
+              <p>{{ expense.company.address }}</p>
+              <p>{{ expense.company.po_box }}</p>
+              <p>{{ expense.company.phone1 }}</p>
+              <p>{{ expense.company.contact_name }}</p>
+              <p>{{ expense.company.contact_email1 }}</p> -->
+            </div>
+            <div class="col s2 m2"></div>
+            <div class="col s5 m5 right-align">
+              <p>
+                <b>Date: {{ expense.date | date : "dd-MM-YYYY" }}</b>
+              </p>
+              <p>
+                <b>Reference: {{ expense.reference }}</b>
+              </p>
+              <qrcode
+                *ngIf="showQr"
+                [qrdata]="expense.reference"
+                [width]="70"
+              ></qrcode>
+            </div>
+          </div>
+          <div
+            class="row"
+            style="font-size: 12px !important"
+            *ngIf="expense.type_expense == 'invoice' && expense.invoice != null"
+          >
+            <div class="col s12 m12">
+              <h6
+                class="center blue darken-2 white-text"
+                style="padding: 3px 0 3px 0px"
+              >
+                Invoice details
+              </h6>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Reference</th>
+                    <th>Client</th>
+                    <th>Total amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ expense.invoice.reference }}</td>
+                    <td>{{ expense.invoice.client.name }}</td>
+                    <td>
+                      <p class="right-align">
+                        {{ calculateTotalInvoice() | customCurrency }}
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col s12 m12">
+              <h6
+                class="center grey darken-2 white-text"
+                style="padding: 3px 0 3px 0px"
+              >
+                {{ expense.label }}
+              </h6>
+            </div>
+          </div>
+          <div class="row">
+            <table>
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th><span class="right">Amount</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of expense.tasks">
+                  <td>{{ item.task }}</td>
+                  <td>
+                    <p class="right-align">
+                      {{ item.amount | customCurrency }}
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>Total</b></td>
+                  <td>
+                    <p class="right-align">
+                      {{ calculateTotalExpense() | customCurrency }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br />
+            <p>
+              Amount in letters:
+              <b>{{ calculateTotalExpense() | currencyToWord }} FCFA</b>
+            </p>
+          </div>
+          <br />
+          <i style="font-size: 12px">Edited by: {{ expense.user.username }}</i>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

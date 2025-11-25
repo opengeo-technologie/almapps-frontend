@@ -8,6 +8,13 @@
   </nav>
   <div class="login-card">
     <div class="card login-form">
+      <p
+        class="red-text center white"
+        style="font-weight: bolder"
+        *ngIf="hasError"
+      >
+        {{ errorMessage }}
+      </p>
       <form #loginForm="ngForm" (ngSubmit)="login()">
         <h2 class="center">Login</h2>
         <label for="username">Email</label>

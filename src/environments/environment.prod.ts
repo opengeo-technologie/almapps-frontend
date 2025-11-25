@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "https://almapps-api.kais-consulting.com",
+  apiUrl: "https://fastapi-app.space",
 };

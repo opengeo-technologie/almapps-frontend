@@ -10,6 +10,7 @@ import { BehaviorSubject, tap } from "rxjs";
 export class AuthService {
   private apiUrl = APP_CONSTANTS.API_BASE_URL;
   private tokenKey = "access_token";
+  private userData = "user";
   isLoggedIn$ = new BehaviorSubject<boolean>(this.hasToken());
 
   private headers = new HttpHeaders({
@@ -29,16 +30,14 @@ export class AuthService {
     };
 
     return this.http
-      .post<{ access_token: string }>(
-        `${this.apiUrl}/auth/login`,
-        credidential,
-        {
-          headers: this.headers,
-        }
-      )
+      .post<any>(`${this.apiUrl}/auth/login`, credidential, {
+        headers: this.headers,
+      })
       .pipe(
         tap((res) => {
+          // console.log(res.user);
           if (this.isBrowser()) {
+            localStorage.setItem(this.userData, JSON.stringify(res.user));
             localStorage.setItem(this.tokenKey, res.access_token);
             this.isLoggedIn$.next(true);
           }
@@ -46,11 +45,24 @@ export class AuthService {
       );
   }
 
-  logout() {
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    sessionStorage.clear();
+    this.isLoggedIn$.next(false);
+    this.router.navigate(["/login"]);
+
+    // if (this.isBrowser()) {
+    //   localStorage.removeItem(this.tokenKey);
+    //   // this.isLoggedIn$.next(false);
+    //   this.router.navigate(["/login"]);
+    // }
+  }
+
+  getUser() {
     if (this.isBrowser()) {
-      localStorage.removeItem(this.tokenKey);
-      this.isLoggedIn$.next(false);
+      return localStorage.getItem(this.userData);
     }
+    return null;
   }
 
   getToken() {

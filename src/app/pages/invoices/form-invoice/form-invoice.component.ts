@@ -10,6 +10,7 @@ import { CompanyDetailService } from "../../../services/company-detail.service";
 import { InvoiceService } from "../../../services/invoice.service";
 import { JobsService } from "../../../services/jobs.service";
 import { TechnicianService } from "../../../services/technician.service";
+import { AuthService } from "../../../services/auth.service";
 declare var M: any;
 
 @Component({
@@ -22,9 +23,12 @@ declare var M: any;
 export class FormInvoiceComponent {
   @Input() invoice: any;
   isAddForm: boolean;
+  isGeneratingPDF: boolean = false;
   clients: any[] = [];
   technicians: any[] = [];
   types: any[] = [];
+
+  user: any;
 
   products: any[] = [];
   // clientForm: NgForm;
@@ -109,6 +113,7 @@ export class FormInvoiceComponent {
     private invoiceService: InvoiceService,
     private jobService: JobsService,
     private techService: TechnicianService,
+    private authService: AuthService,
     private router: Router
   ) {
     this.isAddForm = this.router.url.includes("add");
@@ -150,11 +155,18 @@ export class FormInvoiceComponent {
         this.invoice.company_id = this.company.id;
       });
 
-      this.invoiceService
-        .generateNextReference()
-        .subscribe((reference: any) => {
-          this.invoice.reference = reference.next_reference;
-        });
+      // this.invoiceService
+      //   .generateNextReference()
+      //   .subscribe((reference: any) => {
+      //     this.invoice.reference = reference.next_reference;
+      //   });
+
+      const userData = this.authService.getUser();
+      if (userData) {
+        // console.log(JSON.parse(userData));
+        this.user = JSON.parse(userData);
+        this.invoice.user_id = this.user.id;
+      }
     } else {
       // console.log(this.invoice);
       this.invoice.currency = this.currencies.find(
@@ -588,23 +600,26 @@ export class FormInvoiceComponent {
                 });
               }
             }
+            this.isGeneratingPDF = true;
+            setTimeout(() => {
+              this.invoiceService.getInvoice(invoice_id).subscribe({
+                next: (response: any) => {
+                  // console.log(response);
+                  M.toast({
+                    html: "Data created successfully....",
+                    classes: "rounded green accent-4",
+                    inDuration: 500,
+                    outDuration: 575,
+                  });
+                  // this.loadItems();
+                  this.isGeneratingPDF = false;
+                  this.print(response);
+                },
+                error: (err: any) => console.error(err),
+              });
+            }, 500);
 
-            this.invoiceService.getInvoice(invoice_id).subscribe({
-              next: (response: any) => {
-                // console.log(response);
-                M.toast({
-                  html: "Data created successfully....",
-                  classes: "rounded green accent-4",
-                  inDuration: 500,
-                  outDuration: 575,
-                });
-                // this.loadItems();
-                this.print(response);
-              },
-              error: (err: any) => console.error(err),
-            });
-
-            this.router.navigate(["/invoices/list"]);
+            // this.router.navigate(["/invoices/list"]);
           }
         },
         error: (err: any) => console.error(err),
@@ -750,20 +765,24 @@ export class FormInvoiceComponent {
               }
             }
 
-            this.invoiceService.getInvoice(invoice_id).subscribe({
-              next: (response: any) => {
-                // console.log(response);
-                M.toast({
-                  html: "Data updated successfully....",
-                  classes: "rounded green accent-4",
-                  inDuration: 500,
-                  outDuration: 575,
-                });
-                // this.loadItems();
-                this.print(response);
-              },
-              error: (err: any) => console.error(err),
-            });
+            this.isGeneratingPDF = true;
+            setTimeout(() => {
+              this.invoiceService.getInvoice(invoice_id).subscribe({
+                next: (response: any) => {
+                  // console.log(response);
+                  M.toast({
+                    html: "Data updated successfully....",
+                    classes: "rounded green accent-4",
+                    inDuration: 500,
+                    outDuration: 575,
+                  });
+                  // this.loadItems();
+                  this.isGeneratingPDF = false;
+                  this.print(response);
+                },
+                error: (err: any) => console.error(err),
+              });
+            }, 500);
 
             // this.router.navigate(["/invoices/list"]);
           }

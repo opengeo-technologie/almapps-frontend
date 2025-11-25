@@ -1,0 +1,111 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col s12 m12">
+      <a
+        class="waves-effect waves-light btn-small light-blue darken-4"
+        href="/expenses/add"
+        ><i class="left"
+          ><img
+            src="assets/css/flaticon/svg/new-product.svg"
+            alt=""
+            style="height: 30px; padding-top: 5px" /></i
+        >New expense
+      </a>
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title">Expenses</span>
+          <div class="divider"></div>
+          <div>
+            <table class="highlight centered responsive-table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Label</th>
+                  <th>Date expense</th>
+                  <th>Type expense</th>
+                  <th>Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="paginatedData.length != 0">
+                <tr *ngFor="let item of paginatedData">
+                  <td>{{ item.reference }}</td>
+                  <td>{{ item.label }}</td>
+                  <td>{{ item.date | date : "dd-MM-YYYY" }}</td>
+                  <td>
+                    @if(item.type_expense == 'invoice') {
+                    {{ item.invoice.reference }} } @else {
+                    {{ item.type_expense }}
+                    }
+                  </td>
+                  <td>
+                    {{ item.amount | customCurrency }}
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <a
+                        class="waves-effect waves-light blue btn btn-small"
+                        title="Edit client"
+                        (click)="edit(item)"
+                        >Edit</a
+                      >
+                      <a
+                        class="waves-effect waves-light teal btn btn-small"
+                        title="Edit client"
+                        (click)="print(item)"
+                        >Details</a
+                      >
+                      <a
+                        class="waves-effect waves-light red btn btn-small"
+                        title="Edit client"
+                        (click)="delete(item)"
+                        >Delete</a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="paginatedData.length == 0">
+                <tr>
+                  <td colspan="6">
+                    <i class="center">No data available</i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="center" style="padding-top: 20px">
+              <button
+                (click)="prevPage()"
+                class="btn waves-effect waves-light white darken-4 btn-small"
+                [disabled]="currentPage === 1"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/left-chevron.svg"
+                  alt=""
+                  style="height: 25px; margin-top: 3px"
+                />
+              </button>
+              <span
+                class="page-number"
+                style="margin-left: 10px; margin-right: 10px"
+                >{{ currentPage }} / {{ totalPages() }}</span
+              >
+              <button
+                (click)="nextPage()"
+                class="btn waves-effect waves-light white btn-small"
+                [disabled]="currentPage === totalPages()"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/right-chevron.svg"
+                  alt=""
+                  style="height: 24px; margin-top: 3px"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

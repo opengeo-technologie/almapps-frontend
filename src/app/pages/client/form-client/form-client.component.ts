@@ -4,11 +4,12 @@ import { ClientService } from "../../../services/client.service";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { FormsModule, NgForm } from "@angular/forms";
+import { LoadingScreenComponent } from "../../loading-screen/loading-screen.component";
 declare var M: any;
 
 @Component({
   selector: "app-form-client",
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingScreenComponent],
   standalone: true,
   templateUrl: "./form-client.component.html",
   styleUrl: "./form-client.component.css",
@@ -19,10 +20,11 @@ export class FormClientComponent {
   isAddForm: boolean;
   types: any[] = [];
   typeClient: any;
-  // clientForm: NgForm;
+  isGeneratingPDF: boolean = false;
   selectedTypeId: number = 0;
   response: boolean = false;
   isCompany: boolean = false;
+  loadingMessage: string = "";
 
   constructor(private clientService: ClientService, private router: Router) {
     this.isAddForm = this.router.url.includes("add");
@@ -78,15 +80,20 @@ export class FormClientComponent {
                 next: (event) => {},
               });
             }
-            // Handle the response from the server
-            M.toast({
-              html: "Data created successfully....",
-              classes: "rounded green accent-4",
-              inDuration: 500,
-              outDuration: 575,
-            });
-            // this.loadItems();
-            this.router.navigate(["/clients/list"]);
+            this.isGeneratingPDF = true;
+            this.loadingMessage = "Saving Data !!!";
+            setTimeout(() => {
+              this.isGeneratingPDF = false;
+              // Handle the response from the server
+              M.toast({
+                html: "Data created successfully....",
+                classes: "rounded green accent-4",
+                inDuration: 500,
+                outDuration: 575,
+              });
+              // this.loadItems();
+              this.router.navigate(["/clients/list"]);
+            }, 500);
           }
         },
         error: (err) => console.error(err),
@@ -113,15 +120,21 @@ export class FormClientComponent {
                 next: (event) => {},
               });
             }
-            // Handle the response from the server
-            M.toast({
-              html: "Data updated successfully....",
-              classes: "rounded green accent-4",
-              inDuration: 500,
-              outDuration: 575,
-            });
-            // this.loadItems();
-            this.router.navigate(["/clients/list"]);
+            this.isGeneratingPDF = true;
+            this.loadingMessage = "Update Data !!!";
+            setTimeout(() => {
+              this.isGeneratingPDF = false;
+
+              // Handle the response from the server
+              M.toast({
+                html: "Data updated successfully....",
+                classes: "rounded green accent-4",
+                inDuration: 500,
+                outDuration: 575,
+              });
+              // this.loadItems();
+              this.router.navigate(["/clients/list"]);
+            }, 500);
           }
         },
         error: (err) => console.error(err),

@@ -56,6 +56,11 @@ export class JobsService {
   }
 
   // Job Assign management
+  getJobsAssigned(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/jobs_assign/`, {
+      headers: this.headers,
+    });
+  }
 
   getJobAssignTechnicians(job_id: number): Observable<any[]> {
     return this.http.get<any[]>(

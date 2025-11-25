@@ -33,7 +33,7 @@ export class ClientComponent {
   private navSub?: Subscription;
 
   currentPage = 1;
-  rowsPerPage = 5;
+  rowsPerPage = 10;
 
   constructor(
     private router: Router,

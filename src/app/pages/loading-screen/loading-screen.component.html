@@ -1,0 +1,19 @@
+<!-- Loading Overlay -->
+<div class="row">
+  <div class="card">
+    <div class="card-content">
+      <!-- Overlay preloader: hide/remove this element when invoice generation finishes -->
+      <div class="overlay" role="status" aria-live="polite">
+        <div class="loader-card" aria-hidden="false">
+          <div class="spinner" aria-hidden="true"></div>
+          <div class="loader-text" *ngIf="message">
+            {{ message }}
+            <span class="dots" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

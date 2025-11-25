@@ -15,14 +15,20 @@ import { Router } from "@angular/router";
 export class LoginComponent {
   email = "";
   password = "";
+  errorMessage: string = "";
+  hasError: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
     this.authService.login(this.email, this.password).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.router.navigate(["/menu"]);
+      },
+      error: (err) => {
+        // console.error(err.error);
+        this.hasError = true;
+        this.errorMessage = err.error.detail;
       },
     });
   }

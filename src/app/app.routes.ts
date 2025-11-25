@@ -42,14 +42,29 @@ import { PrintPaymentComponent } from "./pages/payment/print-payment/print-payme
 import { UserComponent } from "./pages/user/user.component";
 import { AddUserComponent } from "./pages/user/add-user/add-user.component";
 import { EditUserComponent } from "./pages/user/edit-user/edit-user.component";
-import { authGuard } from "./auth.guard";
+import { AuthGuard } from "./auth.guard";
+import { ToolsComponent } from "./pages/tools/tools.component";
+import { AddToolComponent } from "./pages/tools/add-tool/add-tool.component";
+import { EditToolComponent } from "./pages/tools/edit-tool/edit-tool.component";
+import { ToolRemoveComponent } from "./pages/tools/tool-remove/tool-remove.component";
+import { AddToolOutputComponent } from "./pages/tools/tool-remove/add-tool-output/add-tool-output.component";
+import { EditToolOutputComponent } from "./pages/tools/tool-remove/edit-tool-output/edit-tool-output.component";
+import { CashManagementComponent } from "./pages/cash-management/cash-management.component";
+import { TransactionsComponent } from "./pages/cash-management/transactions/transactions.component";
+import { AddTransactionComponent } from "./pages/cash-management/transactions/add-transaction/add-transaction.component";
+import { EditTransactionComponent } from "./pages/cash-management/transactions/edit-transaction/edit-transaction.component";
+import { ReportsTransactionsComponent } from "./pages/cash-management/reports-transactions/reports-transactions.component";
+import { ExpensesComponent } from "./pages/expenses/expenses.component";
+import { AddExpenseComponent } from "./pages/expenses/add-expense/add-expense.component";
+import { EditExpenseComponent } from "./pages/expenses/edit-expense/edit-expense.component";
+import { PrintExpenseComponent } from "./pages/expenses/print-expense/print-expense.component";
+import { ReportExpenseComponent } from "./pages/expenses/report-expense/report-expense.component";
 
 export const routes: Routes = [
   {
     path: "",
     redirectTo: "login",
     pathMatch: "full",
-    title: "ALMAPPS - Login page",
   },
   {
     path: "login",
@@ -59,12 +74,12 @@ export const routes: Routes = [
   {
     path: "menu",
     component: MenuListComponent,
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
     title: "ALMAPPS - Main menu",
   },
   {
     path: "",
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: "dashboard",
@@ -285,6 +300,90 @@ export const routes: Routes = [
         component: PrintPaymentComponent,
         title: "ALMAPPS - Print Payments",
       },
+
+      {
+        path: "tools/list",
+        component: ToolsComponent,
+        title: "ALMAPPS - Tools",
+      },
+      {
+        path: "tools/add",
+        component: AddToolComponent,
+        title: "ALMAPPS - Add Tool",
+      },
+      {
+        path: "tools/edit/:id",
+        component: EditToolComponent,
+        title: "ALMAPPS - Edit Tool",
+      },
+      {
+        path: "release/list",
+        component: ToolRemoveComponent,
+        title: "ALMAPPS - Tools release",
+      },
+      {
+        path: "release/add",
+        component: AddToolOutputComponent,
+        title: "ALMAPPS - Add Tools release",
+      },
+      {
+        path: "release/edit/:id",
+        component: EditToolOutputComponent,
+        title: "ALMAPPS - Edit Tools release",
+      },
+
+      {
+        path: "cash-management/list",
+        component: CashManagementComponent,
+        title: "ALMAPPS - Cash management",
+      },
+      {
+        path: "cash-management/transactions/:id",
+        component: ReportsTransactionsComponent,
+        title: "ALMAPPS - Cash management",
+      },
+      {
+        path: "transactions/list",
+        component: TransactionsComponent,
+        title: "ALMAPPS - Cash transactions",
+      },
+      {
+        path: "transactions/add",
+        component: AddTransactionComponent,
+        title: "ALMAPPS - Add Cash transactions",
+      },
+      {
+        path: "transactions/edit/:id",
+        component: EditTransactionComponent,
+        title: "ALMAPPS - Edit Cash transactions",
+      },
+
+      {
+        path: "expenses/list",
+        component: ExpensesComponent,
+        title: "ALMAPPS - Expenses",
+      },
+      {
+        path: "expenses/report",
+        component: ReportExpenseComponent,
+        title: "ALMAPPS - Report Expenses",
+      },
+      {
+        path: "expenses/add",
+        component: AddExpenseComponent,
+        title: "ALMAPPS - Add Expenses",
+      },
+      {
+        path: "expenses/edit/:id",
+        component: EditExpenseComponent,
+        title: "ALMAPPS - Add Expenses",
+      },
+      {
+        path: "expenses/print/:id",
+        component: PrintExpenseComponent,
+        title: "ALMAPPS - Print Expenses",
+      },
     ],
   },
+  // { path: "**", redirectTo: "login" }, // optional 404 fallback
 ];

@@ -118,6 +118,14 @@ export class InvoicesComponent {
     return this.invoices.slice(start, start + this.rowsPerPage);
   }
 
+  totalPayment(payments: any[]) {
+    let result = 0;
+    for (let item of payments) {
+      result += item.amount;
+    }
+    return result;
+  }
+
   totalPages() {
     return Math.ceil(this.invoices.length / this.rowsPerPage);
   }

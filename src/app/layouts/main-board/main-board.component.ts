@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-main-board",
@@ -7,4 +9,13 @@ import { Component } from "@angular/core";
   templateUrl: "./main-board.component.html",
   styleUrl: "./main-board.component.css",
 })
-export class MainBoardComponent {}
+export class MainBoardComponent {
+  constructor(private router: Router, private apiService: AuthService) {
+    // this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    // this.userLocation = JSON.parse(localStorage.getItem('userLocation') || '{}');
+  }
+
+  logout() {
+    this.apiService.logout();
+  }
+}

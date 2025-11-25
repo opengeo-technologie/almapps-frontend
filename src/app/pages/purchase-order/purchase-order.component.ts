@@ -57,7 +57,7 @@ export class PurchaseOrderComponent {
   isAddForm: boolean = true;
 
   currentPage = 1;
-  rowsPerPage = 5;
+  rowsPerPage = 10;
 
   constructor(
     private router: Router,

@@ -19,6 +19,7 @@ declare var M: any;
 export class FormPurchaseOrderComponent {
   @Input() po: any;
   isAddForm: boolean;
+  isGeneratingPDF: boolean = false;
   vendors: any[] = [];
   products: any[] = [];
   // clientForm: NgForm;
@@ -80,10 +81,7 @@ export class FormPurchaseOrderComponent {
     private router: Router
   ) {
     this.isAddForm = this.router.url.includes("add");
-    this.companyService.getActiveCompanyDetail().subscribe((company: any) => {
-      // console.log(company);
-      this.company = company;
-    });
+
     this.productService.getVendors().subscribe((vendors: any[]) => {
       this.vendors = vendors;
     });
@@ -102,10 +100,14 @@ export class FormPurchaseOrderComponent {
   ngAfterContentInit(): void {
     if (this.isAddForm) {
       this.po.currency = this.current_currency;
-      this.poService.generateNextReference().subscribe((reference: any) => {
-        this.po.reference = reference.next_reference;
+      // this.poService.generateNextReference().subscribe((reference: any) => {
+      //   this.po.reference = reference.next_reference;
+      // });
+      this.companyService.getActiveCompanyDetail().subscribe((company: any) => {
+        // console.log(company);
+        this.company = company;
+        this.po.company_id = this.company.id;
       });
-      this.po.company_id = this.company.id;
     } else {
       // console.log(this.po);
       this.po.currency = this.currencies.find(
@@ -271,7 +273,7 @@ export class FormPurchaseOrderComponent {
       this.po.discount_status = this.isDiscount;
       this.po.discount_percent = 0;
     }
-    // console.log(this.order_products_list);
+    console.log(this.po);
     if (this.isAddForm) {
       this.poService.savePurchaseOrder(this.po).subscribe({
         next: (data) => {
@@ -291,22 +293,26 @@ export class FormPurchaseOrderComponent {
                 error: (err) => console.error(err),
               });
             }
-            this.poService.getPurchaseOrder(+po_id).subscribe({
-              next: (response) => {
-                // console.log(response);
-                if (response.status == 200) {
-                  M.toast({
-                    html: "Data created successfully....",
-                    classes: "rounded green accent-4",
-                    inDuration: 500,
-                    outDuration: 575,
-                  });
-                  // this.loadItems();
-                  this.print(response.body);
-                }
-              },
-              error: (err) => console.error(err),
-            });
+            this.isGeneratingPDF = true;
+            setTimeout(() => {
+              this.poService.getPurchaseOrder(+po_id).subscribe({
+                next: (response) => {
+                  // console.log(response);
+                  if (response.status == 200) {
+                    M.toast({
+                      html: "Data created successfully....",
+                      classes: "rounded green accent-4",
+                      inDuration: 500,
+                      outDuration: 575,
+                    });
+                    // this.loadItems();
+                    this.isGeneratingPDF = false;
+                    this.print(response.body);
+                  }
+                },
+                error: (err) => console.error(err),
+              });
+            }, 500);
 
             // this.router.navigate(["/purchase-orders/list"]);
           }
@@ -368,20 +374,24 @@ export class FormPurchaseOrderComponent {
               }
             }
 
-            this.poService.getPurchaseOrder(data.body.id).subscribe({
-              next: (data) => {
-                M.toast({
-                  html: "Data updated successfully....",
-                  classes: "rounded green accent-4",
-                  inDuration: 500,
-                  outDuration: 575,
-                });
-                // this.loadItems();
-                this.print(data.body);
-                // this.router.navigate(["/purchase-orders/list"]);
-              },
-              error: (err) => console.error(err),
-            });
+            this.isGeneratingPDF = true;
+            setTimeout(() => {
+              this.poService.getPurchaseOrder(data.body.id).subscribe({
+                next: (data) => {
+                  M.toast({
+                    html: "Data updated successfully....",
+                    classes: "rounded green accent-4",
+                    inDuration: 500,
+                    outDuration: 575,
+                  });
+                  // this.loadItems();
+                  this.isGeneratingPDF = false;
+                  this.print(data.body);
+                  // this.router.navigate(["/purchase-orders/list"]);
+                },
+                error: (err) => console.error(err),
+              });
+            }, 500);
           }
         },
         error: (err) => console.error(err),

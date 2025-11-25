@@ -1,0 +1,131 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col s12 m12">
+      <a
+        class="waves-effect waves-light btn-small light-blue darken-4"
+        href="/release/add"
+        ><i class="left"
+          ><img
+            src="../../../assets/css/flaticon/svg/new-product.svg"
+            alt=""
+            style="height: 30px; padding-top: 5px" /></i
+        >New release</a
+      >
+      <div class="card hoverable">
+        <div class="card-content">
+          <span class="card-title">Material release list</span>
+          <div class="divider"></div>
+          <div>
+            <table class="highlight centered responsive-table">
+              <thead>
+                <tr>
+                  <th>Tool name</th>
+                  <th>Date release</th>
+                  <th>Quantity</th>
+                  <th>Technician</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="paginatedData.length != 0">
+                <tr *ngFor="let item of paginatedData">
+                  <td>{{ item.tool.name }}</td>
+                  <td>{{ item.date_output | date : "dd-MM-YYYY" }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.technician.name }}</td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      <a
+                        class="waves-effect waves-light btn btn-small"
+                        title="Edit client"
+                        (click)="editClient(item)"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light amber darken-4 btn btn-small"
+                        title="Client details"
+                        (click)="detailClient(item)"
+                        ><i class="material-icons">keyboard_return</i>Return
+                        tool</a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4"
+                        title="Delete client"
+                        (click)="confirmDeleteClient(item)"
+                        ><i class="material-icons">delete</i></a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="paginatedData.length == 0">
+                <tr>
+                  <td colspan="4">
+                    <i class="center">No data available</i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="center" style="padding-top: 20px">
+              <button
+                (click)="prevPage()"
+                class="btn waves-effect waves-light white darken-4 btn-small"
+                [disabled]="currentPage === 1"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/left-chevron.svg"
+                  alt=""
+                  style="height: 25px; margin-top: 3px"
+                />
+              </button>
+              <span
+                class="page-number"
+                style="margin-left: 10px; margin-right: 10px"
+                >{{ currentPage }} / {{ totalPages() }}</span
+              >
+              <button
+                (click)="nextPage()"
+                class="btn waves-effect waves-light white btn-small"
+                [disabled]="currentPage === totalPages()"
+              >
+                <img
+                  src="../../../assets/css/flaticon/svg/right-chevron.svg"
+                  alt=""
+                  style="height: 24px; margin-top: 3px"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="confirmDelete" class="modal">
+    <div class="modal-content">
+      <h4 class="center red-text">
+        Do you really want to delete this product?
+      </h4>
+      <p *ngIf="productToDelete" class="center teal-text darken-4">
+        {{ productToDelete.name }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="deleteTool()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,20 @@
+<app-base [submenus]="submenus"></app-base>
+<main style="padding-left: 320px; padding-top: 30px">
+  <div class="row">
+    <div class="col m2"></div>
+    <div class="col s12 m8">
+      <div class="card hoverable">
+        <div class="card-content">
+          <div class="blue lighten-1 white-text">
+            <span class="card-title">Release tool</span>
+          </div>
+
+          <div class="divider"></div>
+          <app-form-tool-output
+            [tool_output]="tool_output"
+          ></app-form-tool-output>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

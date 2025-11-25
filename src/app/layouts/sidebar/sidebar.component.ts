@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-sidebar",
@@ -16,6 +17,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private authService: AuthService,
     private route: ActivatedRoute // private location: Location
   ) {}
 
@@ -24,5 +26,11 @@ export class SidebarComponent implements OnInit {
     //Add 'implements OnInit' to the class.
     this.activeLink = this.router.url;
     // console.log(this.activeLink);
+
+    const userData = this.authService.getUser();
+    if (userData) {
+      // console.log(JSON.parse(userData));
+      this.user = JSON.parse(userData);
+    }
   }
 }

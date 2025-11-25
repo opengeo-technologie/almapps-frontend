@@ -1,0 +1,318 @@
+<form #clientForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div>
+      <div class="col s12 m12">
+        <div class="row">
+          <h5 class="center">General informations</h5>
+          <hr />
+          <div class="col s12 m6">
+            <div class="form-input">
+              <label for="label"
+                >Expense Label <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="label"
+                  name="label"
+                  [(ngModel)]="expense.label"
+                  #label="ngModel"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Clients -->
+            <div class="form-input">
+              <label for="type_expense"
+                >Type of expense <span class="red-text">(*)</span></label
+              >
+              <select
+                class="browser-default"
+                name="type_expense"
+                id="type_expense"
+                [(ngModel)]="expense.type_expense"
+                [compareWith]="compareClient"
+                (change)="invoiceDropdown()"
+                required
+                [disabled]="!isAddForm"
+              >
+                <option [ngValue]="null" disabled>Select type</option>
+                <option *ngFor="let item of types_expenses" [ngValue]="item">
+                  {{ item.value }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Quotation type -->
+            <div
+              class="form-input"
+              [hidden]="
+                expense.type_expense == null ||
+                expense.type_expense.id != 'invoice'
+              "
+            >
+              <label for="type"
+                >Invoice <span class="red-text">(*)</span></label
+              >
+              <select
+                #selectInvoice
+                name="type"
+                id="type"
+                [(ngModel)]="expense.invoice"
+                [compareWith]="compareFn"
+                (change)="invoiceSelected()"
+                [disabled]="!isAddForm"
+              >
+                <option [ngValue]="null" disabled>Select invoice</option>
+                <option *ngFor="let item of invoices" [ngValue]="item">
+                  {{ item.reference }} ({{ item.client.name }})
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-input"
+              [hidden]="
+                expense.type_expense == null ||
+                expense.type_expense.id != 'job_assign'
+              "
+            >
+              <label for="job_assign"
+                >Job assign <span class="red-text">(*)</span></label
+              >
+              <select
+                #selectJobAssign
+                name="job_assign"
+                id="job_assign"
+                [(ngModel)]="expense_task.job_assign"
+                [compareWith]="compareFn"
+                (change)="invoiceSelected()"
+                [disabled]="!isAddForm"
+              >
+                <option [ngValue]="null" disabled>Select job assign</option>
+                <option *ngFor="let item of assigned_jobs" [ngValue]="item">
+                  {{ item.job.job_name }} ({{ item.technician.name }})
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col s12 m6">
+            <!-- Currencies -->
+            <div class="form-input">
+              <label for="currency"
+                >Currency <span class="red-text">(*)</span></label
+              >
+              <select
+                class="browser-default"
+                name="currency"
+                id="currency"
+                [(ngModel)]="expense.currency"
+                [compareWith]="compareFn"
+                required
+                disabled
+              >
+                <option [ngValue]="null" disabled>Select currency</option>
+                <option *ngFor="let item of currencies" [ngValue]="item">
+                  {{ item.value }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Date of operation -->
+            <div class="form-input">
+              <label for="date_op"
+                >Date operation <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="date"
+                  class="form-control"
+                  id="date_op"
+                  name="date_op"
+                  [(ngModel)]="expense.date"
+                  #date_op="ngModel"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jobs -->
+
+        <div class="row" *ngIf="expense.type_expense != null">
+          <h5 class="center">Expense tasks</h5>
+          <hr />
+          <div
+            class="col m4 s12"
+            style="border: 2px solid #757575; min-height: 100px"
+          >
+            <div
+              class="form-input"
+              [hidden]="
+                expense.type_expense == null ||
+                expense.type_expense.id != 'invoice' ||
+                technicians.length == 0
+              "
+            >
+              <label for="technician">Technician </label>
+              <select
+                #selectTechnician2
+                name="technician"
+                id="technician"
+                [(ngModel)]="expense_task.technician"
+                [compareWith]="compareFn"
+              >
+                <option [ngValue]="null" disabled>Select Technician</option>
+                <option
+                  *ngFor="let item of technicians"
+                  [ngValue]="item.technician"
+                >
+                  {{ item.technician?.name }}
+                </option>
+              </select>
+            </div>
+            <div
+              class="form-input"
+              [hidden]="
+                expense.type_expense == null ||
+                expense.type_expense.id != 'invoice' ||
+                jobs.length == 0
+              "
+            >
+              <label for="job">Job </label>
+              <select
+                #selectJob
+                name="job"
+                id="job"
+                [(ngModel)]="expense_task.job"
+                [compareWith]="compareFn"
+              >
+                <option [ngValue]="null" disabled>Select Job</option>
+                <option *ngFor="let item of jobs" [ngValue]="item.job">
+                  {{ item.job?.job_name }}
+                </option>
+              </select>
+            </div>
+            <div class="form-input">
+              <label for="task_name"
+                >Task label <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="task_name"
+                  name="task_name"
+                  [(ngModel)]="expense_task.task"
+                  #task_name="ngModel"
+                />
+              </div>
+            </div>
+            <!-- Price -->
+            <div class="form-input">
+              <label for="price"
+                >Amount <span class="red-text">(*)</span></label
+              >
+              <div class="input-field">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="price"
+                  name="price"
+                  min="0"
+                  [(ngModel)]="expense_task.amount"
+                  #price="ngModel"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col m2 s12">
+            <button
+              type="button"
+              class="waves-effect waves-light btn btn-small brown darken-3"
+              [disabled]="disabledAssignExpenseTaskButton()"
+              (click)="assignTask()"
+            >
+              <i class="material-icons">compare_arrows</i>
+              Assign
+            </button>
+          </div>
+          <div
+            class="col m6 s12"
+            style="border: 2px solid #757575; min-height: 100px"
+          >
+            <h5 class="center">List of expense tasks</h5>
+            <table>
+              <thead class="center">
+                <tr>
+                  <th *ngIf="technicians.length != 0">Technician</th>
+                  <th *ngIf="jobs.length != 0 || assigned_jobs.length != 0">
+                    Job
+                  </th>
+                  <th>Task</th>
+                  <th>Amount</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="center">
+                <tr *ngFor="let item of item_list; let i = index">
+                  <td *ngIf="item.technician != null">
+                    {{ item.technician.name }}
+                  </td>
+                  <td *ngIf="item.job != null">{{ item.job.job_name }}</td>
+                  <td *ngIf="item.job_assign != null">
+                    {{ item.job_assign.job.job_name }}
+                  </td>
+                  <td
+                    *ngIf="
+                      item.job == null &&
+                      item.technician == null &&
+                      expense.type_expense.id == 'invoice'
+                    "
+                  >
+                    NaN
+                  </td>
+
+                  <td>{{ item.task }}</td>
+                  <td>{{ item.amount | customCurrency }}</td>
+                  <td>
+                    <a
+                      class="btn-flat red-text"
+                      (click)="removeItemToList(item, i)"
+                      ><i class="material-icons">delete_forever</i></a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <div class="divider"></div>
+
+      <div class="col s12 m12 center">
+        <hr />
+        <button
+          type="submit"
+          *ngIf="isAddForm"
+          class="waves-effect waves-light btn"
+          [disabled]="!clientForm.form.valid || item_list.length == 0"
+        >
+          <i class="material-icons">save</i>
+          Save
+        </button>
+
+        <button
+          type="submit"
+          *ngIf="!isAddForm"
+          class="waves-effect waves-light btn"
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

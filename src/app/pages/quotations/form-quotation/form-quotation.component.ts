@@ -20,6 +20,7 @@ declare var M: any;
 export class FormQuotationComponent {
   @Input() quotation: any;
   isAddForm: boolean;
+  isGeneratingPDF: boolean = false;
   clients: any[] = [];
   types: any[] = [];
 
@@ -121,11 +122,11 @@ export class FormQuotationComponent {
         this.quotation.company_id = this.company.id;
       });
 
-      this.quotationService
-        .generateNextReference()
-        .subscribe((reference: any) => {
-          this.quotation.reference = reference.next_reference;
-        });
+      // this.quotationService
+      //   .generateNextReference()
+      //   .subscribe((reference: any) => {
+      //     this.quotation.reference = reference.next_reference;
+      //   });
     } else {
       this.quotation.currency = this.currencies.find(
         (el: any) => el.id == this.quotation.currency_used
@@ -424,22 +425,27 @@ export class FormQuotationComponent {
               }
             }
 
-            this.quotationService.getQuotation(+quotation_id).subscribe({
-              next: (response) => {
-                // console.log(response);
-                if (response.status == 200) {
-                  M.toast({
-                    html: "Data created successfully....",
-                    classes: "rounded green accent-4",
-                    inDuration: 500,
-                    outDuration: 575,
-                  });
-                  // this.loadItems();
-                  this.print(response.body);
-                }
-              },
-              error: (err) => console.error(err),
-            });
+            this.isGeneratingPDF = true;
+
+            setTimeout(() => {
+              this.quotationService.getQuotation(+quotation_id).subscribe({
+                next: (response) => {
+                  // console.log(response);
+                  if (response.status == 200) {
+                    M.toast({
+                      html: "Data created successfully....",
+                      classes: "rounded green accent-4",
+                      inDuration: 500,
+                      outDuration: 575,
+                    });
+                    // this.loadItems();
+                    this.isGeneratingPDF = false;
+                    this.print(response.body);
+                  }
+                },
+                error: (err) => console.error(err),
+              });
+            }, 500);
 
             // this.router.navigate(["/quotations/list"]);
           }
@@ -562,21 +568,26 @@ export class FormQuotationComponent {
                 }
               }
             }
+            this.isGeneratingPDF = true;
 
-            this.quotationService.getQuotation(data.body.id).subscribe({
-              next: (data) => {
-                M.toast({
-                  html: "Data updated successfully....",
-                  classes: "rounded green accent-4",
-                  inDuration: 500,
-                  outDuration: 575,
-                });
-                // this.loadItems();
-                this.print(data.body);
-                // this.router.navigate(["/purchase-orders/list"]);
-              },
-              error: (err) => console.error(err),
-            });
+            setTimeout(() => {
+              this.quotationService.getQuotation(data.body.id).subscribe({
+                next: (data) => {
+                  M.toast({
+                    html: "Data updated successfully....",
+                    classes: "rounded green accent-4",
+                    inDuration: 500,
+                    outDuration: 575,
+                  });
+                  // this.loadItems();
+                  this.isGeneratingPDF = false;
+                  this.print(data.body);
+                  // this.router.navigate(["/purchase-orders/list"]);
+                },
+                error: (err) => console.error(err),
+              });
+            }, 500);
+
             // this.router.navigate(["/quotations/list"]);
           }
         },

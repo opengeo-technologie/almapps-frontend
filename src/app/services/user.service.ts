@@ -41,8 +41,8 @@ export class UserService {
     });
   }
 
-  saveUser(tech: any) {
-    return this.http.post<any>(`${this.apiUrl}/users/create/`, tech, {
+  saveUser(item: any) {
+    return this.http.post<any>(`${this.apiUrl}/users/create/`, item, {
       headers: this.headers,
       reportProgress: true,
       observe: "response",
@@ -61,22 +61,19 @@ export class UserService {
     );
   }
 
-  updateUser(tech: any) {
-    return this.http.put<any>(`${this.apiUrl}/users/update/${tech.id}/`, tech, {
+  updateUser(item: any) {
+    return this.http.put<any>(`${this.apiUrl}/users/update/${item.id}/`, item, {
       headers: this.headers,
       reportProgress: true,
       observe: "response",
     });
   }
 
-  deleteTechnician(tech: any) {
-    return this.http.delete<any>(
-      `${this.apiUrl}/technicians/delete/${tech.id}/`,
-      {
-        headers: this.headers,
-        reportProgress: true,
-        observe: "response",
-      }
-    );
+  deleteUser(item: any) {
+    return this.http.delete<any>(`${this.apiUrl}/users/delete/${item.id}/`, {
+      headers: this.headers,
+      reportProgress: true,
+      observe: "response",
+    });
   }
 }

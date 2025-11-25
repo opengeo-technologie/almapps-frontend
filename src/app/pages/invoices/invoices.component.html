@@ -56,6 +56,14 @@
                         class="waves-effect waves-light btn btn-small"
                         title="Edit purchase order"
                         (click)="edit(item)"
+                        *ngIf="totalPayment(item.payments) == 0"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small disabled-link"
+                        title="Edit purchase order"
+                        (click)="edit(item)"
+                        *ngIf="totalPayment(item.payments) != 0"
                         ><i class="material-icons">edit</i></a
                       >
                       <a
@@ -68,6 +76,14 @@
                         class="waves-effect waves-light btn btn-small red darken-4"
                         title="Delete client"
                         (click)="confirmDelete(item)"
+                        *ngIf="totalPayment(item.payments) == 0"
+                        ><i class="material-icons">delete</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4 disabled-link"
+                        title="Delete client"
+                        (click)="confirmDelete(item)"
+                        *ngIf="totalPayment(item.payments) != 0"
                         ><i class="material-icons">delete</i></a
                       >
                     </div>

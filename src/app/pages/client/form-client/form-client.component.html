@@ -241,4 +241,7 @@
     </div>
   </div>
 </form>
-<h3 *ngIf="!client" class="center"></h3>
+<app-loading-screen
+  [message]="loadingMessage"
+  *ngIf="isGeneratingPDF"
+></app-loading-screen>

@@ -11,3 +11,7 @@
 .card h5 {
   font-size: 18px;
 }
+
+.card a {
+  cursor: pointer !important;
+}
