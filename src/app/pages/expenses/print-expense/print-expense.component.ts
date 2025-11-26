@@ -61,7 +61,7 @@ export class PrintExpenseComponent {
     if (expense_id) {
       // console.log(clientId);
       this.apiService.getExpense(+expense_id).subscribe((expense) => {
-        // console.log(expense);
+        console.log(expense);
         this.expense = expense;
       });
     } else {

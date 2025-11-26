@@ -7,11 +7,12 @@ import { BaseComponent } from "../base/base.component";
 import { FormsModule, NgForm } from "@angular/forms";
 import { JobsService } from "../../services/jobs.service";
 import { TechnicianService } from "../../services/technician.service";
+import { CustomCurrencyPipe } from "../../pipes/currency.pipe";
 declare var M: any;
 
 @Component({
   selector: "app-jobs",
-  imports: [CommonModule, BaseComponent, FormsModule],
+  imports: [CommonModule, BaseComponent, FormsModule, CustomCurrencyPipe],
   standalone: true,
   templateUrl: "./jobs.component.html",
   styleUrl: "./jobs.component.css",
@@ -42,6 +43,7 @@ export class JobsComponent {
     technician: null,
     date_start: null,
     date_end: null,
+    amount: 0,
   };
 
   technicians: any[] = [];
@@ -54,6 +56,8 @@ export class JobsComponent {
   jobToDelete: any;
   newTechModal: any;
   assignTechModal: any;
+  changeJobStatus: any;
+  status: boolean = false;
   private navSub?: Subscription;
   isAddForm: boolean = true;
 
@@ -123,6 +127,7 @@ export class JobsComponent {
     const elem = document.getElementById("confirmDelete");
     const new_edit_job = document.getElementById("new_edit_job");
     const assign_tech = document.getElementById("assign_tech");
+    const change_job_status = document.getElementById("confirmJobStatus");
     // console.log(elem);
     const options = {
       dismissible: false,
@@ -130,6 +135,7 @@ export class JobsComponent {
     this.instanceModal = M.Modal.init(elem, options);
     this.newTechModal = M.Modal.init(new_edit_job, options);
     this.assignTechModal = M.Modal.init(assign_tech, options);
+    this.changeJobStatus = M.Modal.init(change_job_status, options);
   }
 
   ngOnDestroy() {
@@ -298,6 +304,7 @@ export class JobsComponent {
         technician_id: item.technician.id,
         date_start: item.date_start,
         date_end: item.date_end,
+        amount: item.amount,
       };
       this.jobService.saveJobAssignTechnician(object).subscribe({
         next: (data) => {
@@ -338,5 +345,32 @@ export class JobsComponent {
         //   });
       }
     }
+  }
+
+  confirmStatusChange(item: any, status: boolean) {
+    this.job = item;
+    this.status = status;
+    this.changeJobStatus.open();
+  }
+
+  onChangeJobStatus() {
+    this.job.status = this.status;
+    this.jobService.updateJob(this.job).subscribe({
+      next: (data) => {
+        // console.log(data);
+        if (data.status == 204) {
+          // Handle the response from the server
+          M.toast({
+            html: "Data updated successfully....",
+            classes: "rounded green accent-4",
+            inDuration: 500,
+            outDuration: 575,
+          });
+          this.loadData();
+          this.newTechModal.close();
+        }
+      },
+      error: (err) => console.error(err),
+    });
   }
 }

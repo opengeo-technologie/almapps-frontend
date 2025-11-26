@@ -190,7 +190,35 @@ export class FormExpenseComponent {
         this.invoiceDropdown();
         this.invoiceSelected();
       }
+
+      if (this.expense.tasks[0].job_assign != null) {
+        // console.log(this.expense.tasks[0].job_assign);
+        this.expense_task.job_assign = this.expense.tasks[0].job_assign;
+        this.assignedJobsSelectList();
+      }
     }
+  }
+
+  assignedJobsSelectList() {
+    this.jobService.getJobsAssigned().subscribe((assigned_jobs: any[]) => {
+      this.assigned_jobs = assigned_jobs;
+      setTimeout(() => {
+        const instance = M.FormSelect.init(this.selectJobAssign.nativeElement);
+        this.addSearchBox(this.selectJobAssign.nativeElement);
+      }, 300);
+    });
+  }
+
+  assignedInvoiceSelectList() {
+    this.invoiceService.getInvoices().subscribe((invoices: any[]) => {
+      // console.log(invoices);
+      this.invoices = invoices;
+      // Wait a moment for Angular to render <option>s, then init Materialize select
+      setTimeout(() => {
+        const instance = M.FormSelect.init(this.selectInvoice.nativeElement);
+        this.addSearchBox(this.selectInvoice.nativeElement);
+      }, 300);
+    });
   }
 
   invoiceDropdown() {
@@ -204,25 +232,9 @@ export class FormExpenseComponent {
     }
 
     if (this.expense.type_expense.id == "invoice") {
-      this.invoiceService.getInvoices().subscribe((invoices: any[]) => {
-        // console.log(invoices);
-        this.invoices = invoices;
-        // Wait a moment for Angular to render <option>s, then init Materialize select
-        setTimeout(() => {
-          const instance = M.FormSelect.init(this.selectInvoice.nativeElement);
-          this.addSearchBox(this.selectInvoice.nativeElement);
-        }, 300);
-      });
+      this.assignedInvoiceSelectList();
     } else if (this.expense.type_expense.id == "job_assign") {
-      this.jobService.getJobsAssigned().subscribe((assigned_jobs: any[]) => {
-        this.assigned_jobs = assigned_jobs;
-        setTimeout(() => {
-          const instance = M.FormSelect.init(
-            this.selectJobAssign.nativeElement
-          );
-          this.addSearchBox(this.selectJobAssign.nativeElement);
-        }, 300);
-      });
+      this.assignedJobsSelectList();
     }
   }
 
@@ -317,19 +329,27 @@ export class FormExpenseComponent {
       expense_id: null,
       technician_id: null,
       job_id: null,
-      // job_assign: null,
+      job_assign: null,
       task: "",
       amount: 0,
     };
   }
 
   assignTask() {
-    console.log(this.expense_task);
+    // console.log(this.expense_task);
     if (this.isAddForm) {
       this.item_list.push(this.expense_task);
       // this.totalAmount += this.job.duration * this.job.price;
-      this.initExpensceTaskValues();
-      this.invoiceSelected();
+      if (this.expense.type_expense.id == "job_assign") {
+        const job_assign = this.expense_task.job_assign;
+        this.initExpensceTaskValues();
+        this.invoiceSelected();
+        this.expense_task.job_assign = job_assign;
+        this.assignedJobsSelectList();
+      } else {
+        this.initExpensceTaskValues();
+        this.invoiceSelected();
+      }
     } else {
       const new_item = this.removed_from_items_list.find(
         (itemA) => this.expense_task.id === itemA.task.id

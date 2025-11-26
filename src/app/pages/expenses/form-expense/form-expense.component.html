@@ -87,11 +87,13 @@
                 [(ngModel)]="expense_task.job_assign"
                 [compareWith]="compareFn"
                 (change)="invoiceSelected()"
-                [disabled]="!isAddForm"
+                [disabled]="!isAddForm || item_list.length != 0"
               >
                 <option [ngValue]="null" disabled>Select job assign</option>
                 <option *ngFor="let item of assigned_jobs" [ngValue]="item">
-                  {{ item.job.job_name }} ({{ item.technician.name }})
+                  {{ item.job.job_name }} ({{ item.technician.name }}) =>
+                  Amount:
+                  {{ item.amount | customCurrency }}
                 </option>
               </select>
             </div>

@@ -25,6 +25,7 @@
                   <th>Duration</th>
                   <th>Date Program</th>
                   <th>Price</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -34,9 +35,21 @@
                   <td>{{ item.job_description }}</td>
                   <td>{{ item.duration }} hours</td>
                   <td>{{ item.date_program | date : "dd-MM-YYYY" }}</td>
-                  <td>{{ item.price }} FCFA</td>
+                  <td>{{ item.price | customCurrency }}</td>
+                  <td *ngIf="item.status">
+                    <span
+                      class="new badge green"
+                      data-badge-caption="Completed"
+                    ></span>
+                  </td>
+                  <td *ngIf="!item.status">
+                    <span
+                      class="new badge red"
+                      data-badge-caption="Pending"
+                    ></span>
+                  </td>
                   <td>
-                    <div class="btn-group" role="group">
+                    <div class="btn-group" role="group" *ngIf="!item.status">
                       <a
                         class="waves-effect waves-light btn btn-small"
                         title="Edit"
@@ -52,11 +65,37 @@
                       <a
                         class="waves-effect waves-light btn btn-small green"
                         title="Validate job"
-                        (click)="edit(item)"
+                        (click)="confirmStatusChange(item, true)"
                         ><i class="material-icons">check_circle</i></a
                       >
                       <a
                         class="waves-effect waves-light btn btn-small red darken-4"
+                        title="Delete"
+                        (click)="confirmDelete(item)"
+                        ><i class="material-icons">delete</i></a
+                      >
+                    </div>
+                    <div class="btn-group" role="group" *ngIf="item.status">
+                      <a
+                        class="waves-effect waves-light btn btn-small disabled"
+                        title="Edit"
+                        (click)="edit(item)"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small blue disabled"
+                        title="Assign technicians"
+                        (click)="assignTech(item)"
+                        ><i class="material-icons">assignment_ind</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small amber"
+                        title="Validate job"
+                        (click)="confirmStatusChange(item, false)"
+                        ><i class="material-icons">refresh</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4 disabled"
                         title="Delete"
                         (click)="confirmDelete(item)"
                         ><i class="material-icons">delete</i></a
@@ -367,6 +406,23 @@
                         />
                       </div>
                     </div>
+                    <div class="form-input">
+                      <label for="amount"
+                        >Amount <span class="red-text">(*)</span></label
+                      >
+                      <div class="input-field">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="amount"
+                          required
+                          min="0"
+                          name="date_end"
+                          [(ngModel)]="assign_tech.amount"
+                          #email="ngModel"
+                        />
+                      </div>
+                    </div>
                   </div>
                   <div class="col m2 s12">
                     <button
@@ -455,6 +511,32 @@
         type="button"
         class="modal-close waves-effect waves-green btn-flat right green white-text"
         (click)="deleteJob()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal job status -->
+  <div id="confirmJobStatus" class="modal">
+    <div class="modal-content">
+      <h4 class="center blue-text">Do you confirm job completion ?</h4>
+      <p *ngIf="jobToDelete" class="center teal-text darken-4">
+        {{ jobToDelete.name }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="onChangeJobStatus()"
       >
         Yes
       </button>

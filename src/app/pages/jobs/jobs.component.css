@@ -71,8 +71,9 @@ tbody tr td {
   border: 1px solid #e0e0e0;
 }
 
-#confirmDelete {
-  width: 200px;
+#confirmDelete,
+#confirmJobStatus {
+  width: 300px;
   top: 50% !important;
   transform: translate(-50%, -50%) !important;
   left: 50% !important;
