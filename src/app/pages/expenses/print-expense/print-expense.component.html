@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col m1"></div>
     <div class="col s12 m10">
@@ -50,7 +50,7 @@
             <div class="col s2 m2"></div>
             <div class="col s5 m5 right-align">
               <p>
-                <b>Date: {{ expense.date | date : "dd-MM-YYYY" }}</b>
+                <b>Date: {{ expense.date | date: "dd-MM-YYYY" }}</b>
               </p>
               <p>
                 <b>Reference: {{ expense.reference }}</b>
@@ -130,6 +130,36 @@
                     <p class="right-align">
                       {{ calculateTotalExpense() | customCurrency }}
                     </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br />
+            <table>
+              <thead>
+                <tr>
+                  <th>Technician name</th>
+                  <th>Amount programmed</th>
+                  <th>Total expense</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{ expense.tasks[0].job_assign.technician.name }}
+                  </td>
+                  <td class="blue white-text">
+                    {{ expense.tasks[0].job_assign.amount | customCurrency }}
+                  </td>
+                  <td class="red white-text">
+                    {{ calculateTotalExpense() | customCurrency }}
+                  </td>
+                  <td class="green white-text">
+                    {{
+                      expense.tasks[0].job_assign.amount -
+                        calculateTotalExpense() | customCurrency
+                    }}
                   </td>
                 </tr>
               </tbody>

@@ -200,20 +200,37 @@ export class FormExpenseComponent {
   }
 
   assignedJobsSelectList() {
-    this.jobService.getJobsAssigned().subscribe((assigned_jobs: any[]) => {
-      this.assigned_jobs = assigned_jobs;
-      setTimeout(() => {
-        const instance = M.FormSelect.init(this.selectJobAssign.nativeElement);
-        this.addSearchBox(this.selectJobAssign.nativeElement);
-      }, 300);
-    });
+    if (this.isAddForm) {
+      this.jobService
+        .getJobsAssignedByStatus(false)
+        .subscribe((assigned_jobs: any[]) => {
+          this.assigned_jobs = assigned_jobs;
+          setTimeout(() => {
+            const instance = M.FormSelect.init(
+              this.selectJobAssign.nativeElement
+            );
+            this.addSearchBox(this.selectJobAssign.nativeElement);
+          }, 300);
+        });
+    } else {
+      this.jobService.getJobsAssigned().subscribe((assigned_jobs: any[]) => {
+        this.assigned_jobs = assigned_jobs;
+        setTimeout(() => {
+          const instance = M.FormSelect.init(
+            this.selectJobAssign.nativeElement
+          );
+          this.addSearchBox(this.selectJobAssign.nativeElement);
+        }, 300);
+      });
+    }
   }
 
   assignedInvoiceSelectList() {
     this.invoiceService.getInvoices().subscribe((invoices: any[]) => {
-      // console.log(invoices);
+      console.log(invoices);
       this.invoices = invoices;
       // Wait a moment for Angular to render <option>s, then init Materialize select
+
       setTimeout(() => {
         const instance = M.FormSelect.init(this.selectInvoice.nativeElement);
         this.addSearchBox(this.selectInvoice.nativeElement);
@@ -303,6 +320,7 @@ export class FormExpenseComponent {
       }, 300);
     } else if (this.expense.invoice && this.expense.invoice.jobs.length != 0) {
       this.jobs = this.expense.invoice.jobs;
+      this.jobs = this.jobs.filter((el: any) => el.status == false);
 
       setTimeout(() => {
         M.FormSelect.init(this.selectJob.nativeElement);

@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col m1"></div>
     <div class="col s12 m10">
@@ -46,9 +46,7 @@
             <div class="col s2 m2"></div>
             <div class="col s4 m4 right-align">
               <p>
-                <b
-                  >Date of issue: {{ payment.date_op | date : "dd-MM-YYYY" }}</b
-                >
+                <b>Date of issue: {{ payment.date_op | date: "dd-MM-YYYY" }}</b>
               </p>
               <p>
                 <b>Reference: {{ payment.reference }}</b>
@@ -82,14 +80,14 @@
                     <p class="right-align">
                       {{
                         calculateInvoiceAmount(payment.invoice)
-                          | customCurrency : payment.invoice.currency_used
+                          | customCurrency: payment.invoice.currency_used
                       }}
                     </p>
                   </td>
                   <td>
                     <p class="right-align">
                       {{
-                        payment.amount | customCurrency : payment.currency_used
+                        payment.amount | customCurrency: payment.currency_used
                       }}
                     </p>
                   </td>
@@ -105,7 +103,7 @@
                   <td>
                     <p class="right-align" style="font-weight: bolder">
                       {{
-                        payment.amount | customCurrency : payment.currency_used
+                        payment.amount | customCurrency: payment.currency_used
                       }}
                     </p>
                   </td>
@@ -117,7 +115,7 @@
                     <p class="right-align" style="font-weight: bolder">
                       {{
                         calculateTotalPaymentRemain()
-                          | customCurrency : payment.currency_used
+                          | customCurrency: payment.currency_used
                       }}
                     </p>
                   </td>

@@ -1,0 +1,53 @@
+.invoice-container {
+  width: 21cm; /* A4 width */
+  min-height: 32cm; /* A4 height */
+  margin: 2cm auto; /* Centered on the page with margins */
+  background-color: #fff;
+  padding: 1cm;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.header-po {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+/* .header-po {
+  padding-top: 10px;
+} */
+
+.header-po h5 {
+  padding-top: -10px;
+  font-weight: bolder;
+  color: #0d47a1;
+}
+
+thead tr th {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 13px !important;
+  border: 1px solid #e0e0e0;
+}
+
+tbody tr td,
+tr td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 13px !important;
+  border: 1px solid #e0e0e0;
+}
+
+.footer {
+  text-align: center;
+  margin-top: auto; /* Pushes the footer to the bottom of the container */
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  color: #777;
+  font-size: 0.9em;
+}

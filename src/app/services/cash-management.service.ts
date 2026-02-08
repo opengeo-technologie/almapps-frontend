@@ -108,6 +108,22 @@ export class CashManagementService {
       );
   }
 
+  reopenRegister(cash_id: number) {
+    return this.http
+      .post<any>(
+        `${this.apiUrl}/cash/reopen?cash_id=${cash_id}`,
+        {},
+        {
+          headers: this.headers,
+          reportProgress: true,
+          observe: "response",
+        }
+      )
+      .pipe(
+        catchError(this.handleError) // Handle HTTP errors
+      );
+  }
+
   closeRegister() {
     return this.http.post<any>(
       `${this.apiUrl}/cash/close/`,

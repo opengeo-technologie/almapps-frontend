@@ -32,9 +32,13 @@ export class CashManagementComponent {
   ];
 
   data: any[] = [];
+  first_data: any;
+  second_data: any;
   openedRegister: any;
+  cashRegister: any;
   instanceModal: any;
   closeRegisterModal: any;
+  reopenRegisterModal: any;
   opening_balance: number = 0;
   productToDelete: any;
   private navSub?: Subscription;
@@ -75,6 +79,8 @@ export class CashManagementComponent {
     this.cashService.getCashRegisters().subscribe({
       next: (data) => {
         this.data = this.sortByDateDesc(data);
+        this.first_data = this.data[0];
+        this.second_data = this.data[1];
       },
       error: (err) => console.error(err),
     });
@@ -96,15 +102,34 @@ export class CashManagementComponent {
     }
   }
 
+  validateReopen(item: any): boolean {
+    if (
+      item.status == "closed" &&
+      (item.id == this.first_data.id || item.id == this.second_data.id)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  getCashRegister(cash_id: number) {
+    let register = this.data.find((item: any) => item.id == cash_id);
+    if (register) {
+      this.cashRegister = register;
+    }
+  }
+
   initModals() {
     const elem = document.getElementById("confirmOpenRegister");
     const elem2 = document.getElementById("confirmCloseRegister");
+    const elem3 = document.getElementById("confirmReopenRegister");
     // console.log(elem);
     const options = {
       dismissible: false,
     };
     this.instanceModal = M.Modal.init(elem, options);
     this.closeRegisterModal = M.Modal.init(elem2, options);
+    this.reopenRegisterModal = M.Modal.init(elem3, options);
   }
 
   ngOnDestroy() {
@@ -148,6 +173,11 @@ export class CashManagementComponent {
     this.closeRegisterModal.open();
   }
 
+  reopenRegisterTransactions(cash_id: number) {
+    this.getCashRegister(cash_id);
+    this.reopenRegisterModal.open();
+  }
+
   closeModal() {
     this.instanceModal.close();
   }
@@ -177,6 +207,27 @@ export class CashManagementComponent {
         console.log(err);
       },
     });
+  }
+
+  reopenRegister(cash_id: number) {
+    if (this.checkIfOpenedRegister()) {
+      this.cashService.getOpenedCashRegister().subscribe((response) => {
+        // console.log(response);
+        this.closeRegister();
+        this.cashService.reopenRegister(cash_id).subscribe((response) => {});
+      });
+    } else {
+      this.cashService.reopenRegister(cash_id).subscribe((response) => {
+        M.toast({
+          html: "Cash register reopened successfully....",
+          classes: "rounded green accent-4",
+          inDuration: 500,
+          outDuration: 575,
+        });
+        this.loadData();
+        this.closeModal();
+      });
+    }
   }
 
   closeRegister() {

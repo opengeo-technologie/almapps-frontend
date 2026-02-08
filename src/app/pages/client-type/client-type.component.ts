@@ -37,7 +37,10 @@ export class ClientTypeComponent {
 
   ngOnInit(): void {
     this.clientService.getTypeClients().subscribe({
-      next: (data) => (this.types = data),
+      next: (data) => {
+        console.log(data);
+        this.types = data;
+      },
       error: (err) => console.error(err),
     });
     // console.log(this.userLocation)

@@ -33,7 +33,7 @@ export class AddUserComponent {
       icon: "rights.svg",
     },
     {
-      url: "/users/logs",
+      url: "/logs",
       name: "Logs",
       icon: "log-file.svg",
     },

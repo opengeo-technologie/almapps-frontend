@@ -1,3 +1,13 @@
+.invoice-container {
+  min-height: 29.7cm; /* A4 height */
+  margin: 2cm auto; /* Centered on the page with margins */
+  background-color: #fff;
+  padding: 1cm;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
 .header-po {
   padding-top: 10px;
 }
@@ -21,4 +31,31 @@ tr td {
   padding-bottom: 5px;
   font-size: 13px !important;
   border: 1px solid #e0e0e0;
+}
+
+.footer {
+  text-align: center;
+  margin-top: auto; /* Pushes the footer to the bottom of the container */
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  color: #777;
+  font-size: 0.9em;
+}
+
+@media print {
+  body {
+    background-color: #fff;
+  }
+  .invoice-container {
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    padding: 0;
+  }
+  /* Ensure header and footer appear correctly when printed */
+  header,
+  footer {
+    /* CSS for print headers/footers can be tricky; the current setup works as part of the content flow */
+  }
 }

@@ -59,6 +59,8 @@ import { AddExpenseComponent } from "./pages/expenses/add-expense/add-expense.co
 import { EditExpenseComponent } from "./pages/expenses/edit-expense/edit-expense.component";
 import { PrintExpenseComponent } from "./pages/expenses/print-expense/print-expense.component";
 import { ReportExpenseComponent } from "./pages/expenses/report-expense/report-expense.component";
+import { LogsComponent } from "./pages/logs/logs.component";
+import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
 
 export const routes: Routes = [
   {
@@ -382,6 +384,16 @@ export const routes: Routes = [
         path: "expenses/print/:id",
         component: PrintExpenseComponent,
         title: "ALMAPPS - Print Expenses",
+      },
+      {
+        path: "logs",
+        component: LogsComponent,
+        title: "ALMAPPS - Logs",
+      },
+      {
+        path: "users/profile",
+        component: UserProfileComponent,
+        title: "ALMAPPS - Logs",
       },
     ],
   },

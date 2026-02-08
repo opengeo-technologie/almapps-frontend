@@ -29,6 +29,12 @@ export class UserService {
     });
   }
 
+  getLogs(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/logs/`, {
+      headers: this.headers,
+    });
+  }
+
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/users/`, {
       headers: this.headers,

@@ -177,9 +177,9 @@ export class FormPaymentComponent {
   }
 
   calculateInvoiceAmount(item: any) {
-    let result = item.amount;
+    let result = Math.round(item.amount);
     if (item.tva_status) {
-      result += item.amount * 0.1925;
+      result += Math.round(item.amount * 0.1925);
     }
 
     return result;
@@ -187,12 +187,13 @@ export class FormPaymentComponent {
 
   changeInvoice() {
     // console.log(this.invoice_selected);
-    this.billing_amount =
+    this.billing_amount = Math.round(
       this.calculateInvoiceAmount(this.invoice_selected) -
-      this.calculateTotalPayment(this.invoice_selected.payments);
+        this.calculateTotalPayment(this.invoice_selected.payments)
+    );
 
     this.maxAmount = this.billing_amount;
-    this.payment.amount = this.maxAmount;
+    this.payment.amount = Math.round(this.maxAmount);
   }
 
   compareFn(c1: any, c2: any): boolean {

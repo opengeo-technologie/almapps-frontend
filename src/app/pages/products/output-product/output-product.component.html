@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col s12 m12">
       <!-- <a
@@ -29,7 +29,7 @@
               <tbody *ngIf="paginatedData.length != 0">
                 <tr *ngFor="let item of paginatedData">
                   <td>{{ item.product }}</td>
-                  <td>{{ item.date_output | date : "dd-MM-YYYY" }}</td>
+                  <td>{{ item.date_output | date: "dd-MM-YYYY" }}</td>
                   <td>{{ item.quantity }}</td>
                   <td>{{ item.price }} FCFA</td>
                 </tr>

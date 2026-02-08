@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col s12 m12">
       <a
@@ -32,13 +32,14 @@
                 <tr *ngFor="let item of paginatedData">
                   <td>{{ item.reference }}</td>
                   <td>{{ item.label }}</td>
-                  <td>{{ item.date | date : "dd-MM-YYYY" }}</td>
-                  <td>
-                    @if(item.type_expense == 'invoice') {
-                    {{ item.invoice.reference }} } @else {
-                    {{ item.type_expense }}
-                    }
+                  <td>{{ item.date | date: "dd-MM-YYYY" }}</td>
+                  <td *ngIf="item.type_expense == 'invoice'">
+                    {{ item.invoice.reference }}
                   </td>
+                  <td *ngIf="item.type_expense == 'job_assign'">
+                    Job Assigned
+                  </td>
+                  <td *ngIf="item.type_expense == 'none'">None</td>
                   <td>
                     {{ item.amount | customCurrency }}
                   </td>
@@ -59,7 +60,7 @@
                       <a
                         class="waves-effect waves-light red btn btn-small"
                         title="Edit client"
-                        (click)="delete(item)"
+                        (click)="confirmDelete(item)"
                         >Delete</a
                       >
                     </div>
@@ -109,3 +110,28 @@
     </div>
   </div>
 </main>
+
+<!-- Modal delete job -->
+<div id="confirmDelete" class="modal">
+  <div class="modal-content">
+    <h4 class="center red-text">Do you really want to delete this expense?</h4>
+    <p *ngIf="expenseToDelete" class="center teal-text darken-4">
+      {{ expenseToDelete.reference }} ({{ expenseToDelete.label }})
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="modal-close waves-effect waves-green btn-flat red left white-text"
+    >
+      No
+    </button>
+    <button
+      type="button"
+      class="modal-close waves-effect waves-green btn-flat right green white-text"
+      (click)="delete()"
+    >
+      Yes
+    </button>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col s12 m12">
       <a
@@ -29,7 +29,7 @@
               </thead>
               <tbody *ngIf="paginatedData.length != 0">
                 <tr *ngFor="let item of paginatedData">
-                  <td>{{ item.date | date : "dd-MM-YYYY" }}</td>
+                  <td>{{ item.date | date: "dd-MM-YYYY" }}</td>
                   <td>{{ item.opening_balance | customCurrency }}</td>
                   <td *ngIf="item.closing_balance">
                     {{ item.closing_balance | customCurrency }}
@@ -51,19 +51,31 @@
                         class="waves-effect waves-light red btn btn-small"
                         (click)="openCloseRegister()"
                         *ngIf="item.status == 'open'"
-                        >Close cash register</a
+                        ><i class="material-icons">close</i></a
                       >
                       <a
                         class="waves-effect waves-light red btn btn-small disabled-link"
                         *ngIf="item.status == 'closed'"
-                        >Close cash register</a
+                        ><i class="material-icons">close</i></a
                       >
                       <a
-                        class="waves-effect waves-light blue btn btn-small"
+                        class="waves-effect waves-light amber btn btn-small"
+                        (click)="reopenRegisterTransactions(item.id)"
+                        *ngIf="validateReopen(item)"
+                        ><i
+                          ><img
+                            [src]="'assets/css/flaticon/svg/form.svg'"
+                            alt="" /></i
+                      ></a>
+                      <a
+                        class="waves-effect waves-light grey darken-2 btn btn-small"
                         title="Edit client"
                         (click)="detailCashRegister(item)"
-                        >Transactions</a
-                      >
+                        ><i
+                          ><img
+                            [src]="'assets/css/flaticon/svg/money-transfer.svg'"
+                            alt="" /></i
+                      ></a>
                     </div>
                   </td>
                 </tr>
@@ -117,7 +129,7 @@
       <h4 class="center red-text">Open cash register for today</h4>
       <p *ngIf="checkIfOpenedRegister()" class="center black-text darken-4">
         Please close register of date
-        <b>{{ openedRegister.date | date : "dd-MM-YYYY" }}</b> before moving
+        <b>{{ openedRegister.date | date: "dd-MM-YYYY" }}</b> before moving
         forward or the system will automatically close register.
       </p>
       <div class="form-input" *ngIf="paginatedData.length == 0">
@@ -156,12 +168,38 @@
     </div>
   </div>
 
+  <div id="confirmReopenRegister" class="modal">
+    <div class="modal-content">
+      <h4 class="center amber-text">Reopen cash register</h4>
+      <p *ngIf="cashRegister" class="center black-text darken-4">
+        open register of date
+        <b>{{ cashRegister.date | date: "dd-MM-YYYY" }}</b>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="reopenRegister(cashRegister.id)"
+      >
+        Confirm
+      </button>
+    </div>
+  </div>
+
   <div id="confirmCloseRegister" class="modal">
     <div class="modal-content">
       <h4 class="center red-text">Close cash register</h4>
       <p *ngIf="checkIfOpenedRegister()" class="center black-text darken-4">
         Close register of date
-        <b>{{ openedRegister.date | date : "dd-MM-YYYY" }}</b>
+        <b>{{ openedRegister.date | date: "dd-MM-YYYY" }}</b>
       </p>
     </div>
     <div class="modal-footer">

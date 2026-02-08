@@ -32,7 +32,7 @@ export class UserComponent {
       icon: "rights.svg",
     },
     {
-      url: "/users/logs",
+      url: "/logs",
       name: "Logs",
       icon: "log-file.svg",
     },
@@ -46,7 +46,7 @@ export class UserComponent {
   private navSub?: Subscription;
 
   currentPage = 1;
-  rowsPerPage = 5;
+  rowsPerPage = 10;
 
   constructor(
     private router: Router,

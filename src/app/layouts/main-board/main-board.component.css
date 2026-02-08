@@ -15,3 +15,19 @@
 .card a {
   cursor: pointer !important;
 }
+
+@media only screen and (max-width: 992px) {
+  .card {
+    height: 120px;
+    /* width: 250px; */
+  }
+
+  .card h5 {
+    font-size: 13px;
+  }
+
+  .card img {
+    height: 50px;
+    padding-top: 25px;
+  }
+}

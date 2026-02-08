@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col m1"></div>
     <div class="col s12 m10">
@@ -37,7 +37,7 @@
             <div class="col s5 m5 center">
               <p style="font-size: 16px; border: 2px solid black">
                 <b *ngIf="register"
-                  >Date: {{ register.date | date : "dd-MM-YYYY" }}</b
+                  >Date: {{ register.date | date: "dd-MM-YYYY" }}</b
                 >
               </p>
             </div>
@@ -70,23 +70,27 @@
                   <td>{{ i + 1 }}</td>
                   <td>{{ item.description }}</td>
                   <td>
-                    <p>{{ item.date | date : "dd-MM-YYYY" }}</p>
+                    <p>{{ item.date | date: "dd-MM-YYYY" }}</p>
                   </td>
                   <td>
                     <p
                       class="right-align green-text"
                       style="font-weight: bolder"
                     >
-                      @if(item.type == 'in') {
-                      {{ item.amount | customCurrency }}
-                      } @else { - }
+                      @if (item.type == "in") {
+                        {{ item.amount | customCurrency }}
+                      } @else {
+                        -
+                      }
                     </p>
                   </td>
                   <td>
                     <p class="right-align red-text" style="font-weight: bolder">
-                      @if(item.type == 'out') {
-                      {{ item.amount | customCurrency }}
-                      } @else { - }
+                      @if (item.type == "out") {
+                        {{ item.amount | customCurrency }}
+                      } @else {
+                        -
+                      }
                     </p>
                   </td>
                 </tr>

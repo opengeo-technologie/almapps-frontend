@@ -31,6 +31,12 @@ export class JobsService {
     });
   }
 
+  getJobsByStatus(status: boolean): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/jobs/${status}/`, {
+      headers: this.headers,
+    });
+  }
+
   saveJob(job: any) {
     return this.http.post<any>(`${this.apiUrl}/jobs/create/`, job, {
       headers: this.headers,
@@ -58,6 +64,12 @@ export class JobsService {
   // Job Assign management
   getJobsAssigned(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/jobs_assign/`, {
+      headers: this.headers,
+    });
+  }
+
+  getJobsAssignedByStatus(status: boolean): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/jobs_assign/filter/${status}`, {
       headers: this.headers,
     });
   }

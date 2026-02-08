@@ -273,7 +273,7 @@ export class FormPurchaseOrderComponent {
       this.po.discount_status = this.isDiscount;
       this.po.discount_percent = 0;
     }
-    console.log(this.po);
+    // console.log(this.po);
     if (this.isAddForm) {
       this.poService.savePurchaseOrder(this.po).subscribe({
         next: (data) => {

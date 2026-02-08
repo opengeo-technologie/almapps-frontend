@@ -503,8 +503,23 @@ export class FormInvoiceComponent {
     }
   }
 
-  print(po: any) {
-    this.router.navigate(["/invoices/print", po.id]);
+  print(invoice_id: any) {
+    this.router.navigate(["/invoices/print", invoice_id]);
+    // this.invoiceService.getInvoice(invoice_id).subscribe({
+    //   next: (response: any) => {
+    //     // console.log(response);
+    //     M.toast({
+    //       html: "Data updated successfully....",
+    //       classes: "rounded green accent-4",
+    //       inDuration: 500,
+    //       outDuration: 575,
+    //     });
+    //     // this.loadItems();
+    //     this.isGeneratingPDF = false;
+
+    //   },
+    //   error: (err: any) => console.error(err),
+    // });
   }
 
   // onSubmit() {}
@@ -602,21 +617,8 @@ export class FormInvoiceComponent {
             }
             this.isGeneratingPDF = true;
             setTimeout(() => {
-              this.invoiceService.getInvoice(invoice_id).subscribe({
-                next: (response: any) => {
-                  // console.log(response);
-                  M.toast({
-                    html: "Data created successfully....",
-                    classes: "rounded green accent-4",
-                    inDuration: 500,
-                    outDuration: 575,
-                  });
-                  // this.loadItems();
-                  this.isGeneratingPDF = false;
-                  this.print(response);
-                },
-                error: (err: any) => console.error(err),
-              });
+              this.print(invoice_id);
+              this.isGeneratingPDF = false;
             }, 500);
 
             // this.router.navigate(["/invoices/list"]);
@@ -767,21 +769,8 @@ export class FormInvoiceComponent {
 
             this.isGeneratingPDF = true;
             setTimeout(() => {
-              this.invoiceService.getInvoice(invoice_id).subscribe({
-                next: (response: any) => {
-                  // console.log(response);
-                  M.toast({
-                    html: "Data updated successfully....",
-                    classes: "rounded green accent-4",
-                    inDuration: 500,
-                    outDuration: 575,
-                  });
-                  // this.loadItems();
-                  this.isGeneratingPDF = false;
-                  this.print(response);
-                },
-                error: (err: any) => console.error(err),
-              });
+              this.print(invoice_id);
+              this.isGeneratingPDF = false;
             }, 500);
 
             // this.router.navigate(["/invoices/list"]);

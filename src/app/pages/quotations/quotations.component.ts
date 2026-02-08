@@ -177,70 +177,63 @@ export class QuotationsComponent {
     this.instanceModal.close();
   }
 
-  // deleteTechnician() {
-  //   // console.log(this.vendorToDelete);
-  //   this.techService
-  //     .deleteTechnician(this.techToDelete)
-  //     .subscribe((response) => {
-  //       if (response.status == 202) {
-  //         // Handle the response from the server
-  //         M.toast({
-  //           html: "Data deleted successfully....",
-  //           classes: "rounded red accent-4",
-  //           inDuration: 500,
-  //           outDuration: 575,
-  //         });
-  //         this.loadData();
-  //         this.closeModal();
-  //       }
-  //     });
-  // }
+  calculateTotalAmountProduct(item: any): number {
+    return item.quantity * item.unit_price;
+  }
 
-  // onSubmit() {
-  //   // console.log(this.technician);
-  //   const role_id = this.technician.role.id;
+  calculateTotalWithouxVAT(po: any): number {
+    let result = 0;
+    if (po.products.length != 0) {
+      for (let item of po.products) {
+        result += this.calculateTotalAmountProduct(item);
+      }
+    } else {
+      for (let item of po.services) {
+        result += this.calculateTotalAmountProduct(item);
+      }
+    }
 
-  //   const tech = { ...this.technician };
+    return result;
+  }
 
-  //   // console.log(tech);
-  //   delete tech.role;
-  //   tech.role_id = role_id;
-  //   if (this.isAddForm) {
-  //     this.techService.saveTechnician(tech).subscribe({
-  //       next: (data) => {
-  //         // console.log(data);
-  //         if (data.status == 201) {
-  //           // Handle the response from the server
-  //           M.toast({
-  //             html: "Data created successfully....",
-  //             classes: "rounded green accent-4",
-  //             inDuration: 500,
-  //             outDuration: 575,
-  //           });
-  //           this.loadData();
-  //           this.newTechModal.close();
-  //         }
-  //       },
-  //       error: (err) => console.error(err),
-  //     });
-  //   } else {
-  //     this.techService.updateTechnician(tech).subscribe({
-  //       next: (data) => {
-  //         // console.log(data);
-  //         if (data.status == 204) {
-  //           // Handle the response from the server
-  //           M.toast({
-  //             html: "Data updated successfully....",
-  //             classes: "rounded green accent-4",
-  //             inDuration: 500,
-  //             outDuration: 575,
-  //           });
-  //           this.loadData();
-  //           this.newTechModal.close();
-  //         }
-  //       },
-  //       error: (err) => console.error(err),
-  //     });
-  //   }
-  // }
+  calculateDiscount(po: any): number {
+    return (this.calculateTotalWithouxVAT(po) * po.discount_percent) / 100;
+  }
+
+  calculateTotalWithouxVATDiscount(po: any): number {
+    return this.calculateTotalWithouxVAT(po) - this.calculateDiscount(po);
+  }
+
+  calculateVATAmount(po: any): number {
+    if (po.discount_status) {
+      return (
+        (this.calculateTotalWithouxVATDiscount(po) + po.delivery_amount) *
+        0.1925
+      );
+    } else {
+      return (this.calculateTotalWithouxVAT(po) + po.delivery_amount) * 0.1925;
+    }
+  }
+
+  calculateTotal(po: any): number {
+    if (po.tva_status && po.discount_status) {
+      return Math.round(
+        this.calculateTotalWithouxVATDiscount(po) +
+          po.delivery_amount +
+          this.calculateVATAmount(po)
+      );
+    }
+    if (po.tva_status && !po.discount_status) {
+      return Math.round(
+        this.calculateTotalWithouxVAT(po) + this.calculateVATAmount(po)
+      );
+    }
+    if (po.discount_status) {
+      return Math.round(
+        this.calculateTotalWithouxVATDiscount(po) + po.delivery_amount
+      );
+    }
+
+    return Math.round(this.calculateTotalWithouxVAT(po));
+  }
 }

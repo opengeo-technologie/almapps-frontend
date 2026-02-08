@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col m1"></div>
     <div class="col s12 m10">
@@ -15,7 +15,7 @@
 
   <div class="row" *ngIf="po">
     <div class="col s12 m12 center">
-      <button class="btn-small blue" (click)="generatePdf()">
+      <button class="btn-small blue" (click)="generatePdf2()">
         <i class="material-icons">print</i>Print quotation
       </button>
     </div>
@@ -45,7 +45,7 @@
             <div class="col s2 m2"></div>
             <div class="col s5 m5 right-align">
               <p>
-                <b>Date: {{ po.date_op | date : "dd-MM-YYYY" }}</b>
+                <b>Date: {{ po.date_op | date: "dd-MM-YYYY" }}</b>
               </p>
               <p>
                 <b>Reference: {{ po.reference }}</b>
@@ -110,14 +110,14 @@
                   </td>
                   <td>
                     <p class="right-align">
-                      {{ item.unit_price | customCurrency : po.currency_used }}
+                      {{ item.unit_price | customCurrency: po.currency_used }}
                     </p>
                   </td>
                   <td>
                     <p class="right-align">
                       {{
                         calculateTotalAmountProduct(item)
-                          | customCurrency : po.currency_used
+                          | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -134,7 +134,7 @@
                     <p class="right-align" style="font-weight: bolder">
                       {{
                         calculateTotalWithouxVAT()
-                          | customCurrency : po.currency_used
+                          | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -152,7 +152,7 @@
                       style="font-weight: bolder"
                     >
                       {{
-                        calculateDiscount() | customCurrency : po.currency_used
+                        calculateDiscount() | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -169,7 +169,7 @@
                     >
                       {{
                         calculateTotalWithouxVATDiscount()
-                          | customCurrency : po.currency_used
+                          | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -182,7 +182,7 @@
                   <td>
                     <p class="right-align" style="font-weight: bolder">
                       {{
-                        po.delivery_amount | customCurrency : po.currency_used
+                        po.delivery_amount | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -195,7 +195,7 @@
                   <td>
                     <p class="right-align" style="font-weight: bolder">
                       {{
-                        calculateVATAmount() | customCurrency : po.currency_used
+                        calculateVATAmount() | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -207,7 +207,7 @@
                   </td>
                   <td>
                     <p class="right-align" style="font-weight: bolder">
-                      {{ calculateTotal() | customCurrency : po.currency_used }}
+                      {{ calculateTotal() | customCurrency: po.currency_used }}
                     </p>
                   </td>
                 </tr>
@@ -221,14 +221,14 @@
                   </td>
                   <td>
                     <p class="right-align">
-                      {{ item.unit_price | customCurrency : po.currency_used }}
+                      {{ item.unit_price | customCurrency: po.currency_used }}
                     </p>
                   </td>
                   <td>
                     <p class="right-align">
                       {{
                         calculateTotalAmountProduct(item)
-                          | customCurrency : po.currency_used
+                          | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -245,7 +245,7 @@
                     <p class="right-align" style="font-weight: bolder">
                       {{
                         calculateTotalWithouxVAT()
-                          | customCurrency : po.currency_used
+                          | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -263,7 +263,7 @@
                       style="font-weight: bolder"
                     >
                       {{
-                        calculateDiscount() | customCurrency : po.currency_used
+                        calculateDiscount() | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -280,7 +280,7 @@
                     >
                       {{
                         calculateTotalWithouxVATDiscount()
-                          | customCurrency : po.currency_used
+                          | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -293,7 +293,7 @@
                   <td>
                     <p class="right-align" style="font-weight: bolder">
                       {{
-                        po.delivery_amount | customCurrency : po.currency_used
+                        po.delivery_amount | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -306,7 +306,7 @@
                   <td>
                     <p class="right-align" style="font-weight: bolder">
                       {{
-                        calculateVATAmount() | customCurrency : po.currency_used
+                        calculateVATAmount() | customCurrency: po.currency_used
                       }}
                     </p>
                   </td>
@@ -318,7 +318,7 @@
                   </td>
                   <td>
                     <p class="right-align" style="font-weight: bolder">
-                      {{ calculateTotal() | customCurrency : po.currency_used }}
+                      {{ calculateTotal() | customCurrency: po.currency_used }}
                     </p>
                   </td>
                 </tr>

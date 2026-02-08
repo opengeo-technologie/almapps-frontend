@@ -52,7 +52,6 @@
                   type="text"
                   class="form-control"
                   id="address"
-                  required
                   name="address"
                   [(ngModel)]="client.address"
                   placeholder="Client address"
@@ -71,7 +70,6 @@
                   type="email"
                   class="form-control"
                   id="email"
-                  required
                   name="email"
                   [(ngModel)]="client.email"
                   placeholder="Client email"
@@ -92,7 +90,6 @@
                   class="form-control"
                   id="phone"
                   name="phone"
-                  required
                   [(ngModel)]="client.phone"
                   placeholder="Client phone"
                   #phone="ngModel"
@@ -166,7 +163,6 @@
                 type="text"
                 class="form-control"
                 id="contact_name"
-                required
                 name="contact_name"
                 [(ngModel)]="contact.name"
                 placeholder="Contact name"
@@ -186,7 +182,6 @@
                 class="form-control"
                 id="contact_email"
                 name="contact_email"
-                required
                 [(ngModel)]="contact.email"
                 placeholder="Contact email"
                 #contact_email="ngModel"

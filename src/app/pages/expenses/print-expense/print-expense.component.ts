@@ -110,6 +110,8 @@ export class PrintExpenseComponent {
     this.pdfMake.createPdf(docDefinition).open();
   }
 
+  groupJobAssignTasksPerTechnician() {}
+
   calculateTotalAmountJobs(item: any): number {
     return item.job.duration * item.job.price;
   }

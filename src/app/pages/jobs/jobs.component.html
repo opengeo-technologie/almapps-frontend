@@ -1,5 +1,5 @@
 <app-base [submenus]="submenus"></app-base>
-<main style="padding-left: 320px; padding-top: 30px">
+<main>
   <div class="row">
     <div class="col s12 m12">
       <a
@@ -34,7 +34,7 @@
                   <td>{{ item.job_name }}</td>
                   <td>{{ item.job_description }}</td>
                   <td>{{ item.duration }} hours</td>
-                  <td>{{ item.date_program | date : "dd-MM-YYYY" }}</td>
+                  <td>{{ item.date_program | date: "dd-MM-YYYY" }}</td>
                   <td>{{ item.price | customCurrency }}</td>
                   <td *ngIf="item.status">
                     <span

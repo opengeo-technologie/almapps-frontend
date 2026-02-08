@@ -6,6 +6,7 @@ import { BaseComponent } from "../base/base.component";
 import { Router } from "@angular/router";
 import { CompanyDetailService } from "../../services/company-detail.service";
 import { ExpenseService } from "../../services/expense.service";
+declare var M: any;
 
 @Component({
   selector: "app-expenses",
@@ -28,8 +29,11 @@ export class ExpensesComponent {
     },
   ];
 
+  expenseToDelete: any;
+  instanceModal: any;
+
   currentPage = 1;
-  rowsPerPage = 5;
+  rowsPerPage = 10;
 
   data: any[] = [];
 
@@ -46,6 +50,12 @@ export class ExpensesComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.loadData();
+    const elem = document.getElementById("confirmDelete");
+    // console.log(elem);
+    const options = {
+      dismissible: false,
+    };
+    this.instanceModal = M.Modal.init(elem, options);
   }
 
   loadData() {
@@ -79,11 +89,35 @@ export class ExpensesComponent {
     }
   }
 
+  confirmDelete(expense: any) {
+    this.expenseToDelete = expense;
+    this.instanceModal.open();
+  }
+
+  deleteExpense() {}
+
   edit(item: any) {
     this.router.navigate(["/expenses/edit", item.id]);
   }
   print(report: any) {
     this.router.navigate(["/expenses/print", report.id]);
   }
-  delete(item: any) {}
+  delete() {
+    this.expenseToDelete.deleted = true;
+    this.expenseService.updateExpense(this.expenseToDelete).subscribe({
+      next: (data: any) => {
+        // console.log(data.body);
+        if (data.status == 206) {
+          M.toast({
+            html: "Data deleted successfully....",
+            classes: "rounded red accent-4",
+            inDuration: 500,
+            outDuration: 575,
+          });
+          this.loadData();
+        }
+      },
+      error: (err: any) => console.error(err),
+    });
+  }
 }

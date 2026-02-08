@@ -5,6 +5,8 @@ body {
 
 main {
   padding-top: 0;
+  padding-left: 320px;
+  padding-top: 30px;
 }
 
 /* Ombre + z-index au besoin (Materialize gère déjà, mais au cas où) */
@@ -40,9 +42,13 @@ nav {
 }
 
 .btn-group > .btn {
-  -webkit-box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0),
-    0 0px 0px 0px rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0);
-  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0px rgba(0, 0, 0, 0),
+  -webkit-box-shadow:
+    0 0px 0px 0 rgba(0, 0, 0, 0),
+    0 0px 0px 0px rgba(0, 0, 0, 0),
+    0 0px 0px 0 rgba(0, 0, 0, 0);
+  box-shadow:
+    0 0px 0px 0 rgba(0, 0, 0, 0),
+    0 0px 0px 0px rgba(0, 0, 0, 0),
     0 0px 0px 0 rgba(0, 0, 0, 0);
 }
 
@@ -58,10 +64,19 @@ nav {
 }
 
 .btn-group > .btn:hover {
-  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12),
+    0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12),
+    0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-group a i img {
+  height: 20px;
+  margin-top: 7px;
 }
 
 /* Style Materialize custom select */
@@ -140,7 +155,12 @@ input[readonly] {
   place-items: center;
   background: rgba(255, 255, 255, 0.9);
   z-index: 9999;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
     Arial;
 }
 
@@ -221,6 +241,13 @@ input[readonly] {
   100% {
     opacity: 0.15;
     transform: translateY(0);
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  main {
+    margin-left: 0;
+    padding-left: 0;
   }
 }
 

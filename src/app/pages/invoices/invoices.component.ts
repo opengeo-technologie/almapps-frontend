@@ -91,7 +91,7 @@ export class InvoicesComponent {
   loadData() {
     this.apiService.getInvoices().subscribe({
       next: (data) => {
-        // console.log(data);
+        console.log(data);
         this.invoices = data;
       },
       error: (err) => console.error(err),
@@ -157,5 +157,57 @@ export class InvoicesComponent {
 
   closeModal() {
     this.instanceModal.close();
+  }
+
+  calculateTotalAmountJobs(invoice: any, item: any): number {
+    if (invoice.products.length != 0) {
+      return item.quantity * item.unit_price;
+    } else {
+      return item.job.duration * item.job.price;
+    }
+  }
+
+  calculateTotalTechnicianAmountHours(item: any) {
+    let normal_hours_amount =
+      (item.normal_hour1 + item.normal_hour2) * item.normal_unit_price;
+    let overtime_hours_amount =
+      (item.overtime_hour1 + item.overtime_hour2) * item.overtime_unit_price;
+    let allowance_hours_amount =
+      (item.allowance_hour1 + item.allowance_hour2) * item.allowance_unit_price;
+
+    return normal_hours_amount + overtime_hours_amount + allowance_hours_amount;
+  }
+
+  calculateTotalWithouxVAT(invoice: any): number {
+    let result = 0;
+    if (invoice.products.length != 0) {
+      for (let item of invoice.products) {
+        result += this.calculateTotalAmountJobs(invoice, item);
+      }
+    } else if (invoice.jobs.length != 0) {
+      for (let item of invoice.jobs) {
+        result += this.calculateTotalAmountJobs(invoice, item);
+      }
+    } else {
+      for (let item of invoice.technicians) {
+        result += this.calculateTotalTechnicianAmountHours(item);
+      }
+    }
+
+    return result;
+  }
+
+  calculateVATAmount(invoice: any): number {
+    if (invoice.tva_status) {
+      return this.calculateTotalWithouxVAT(invoice) * 0.1925;
+    } else {
+      return 0;
+    }
+  }
+
+  calculateTotal(invoice: any): number {
+    return Math.round(
+      this.calculateTotalWithouxVAT(invoice) + this.calculateVATAmount(invoice)
+    );
   }
 }

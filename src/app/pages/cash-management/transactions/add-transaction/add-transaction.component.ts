@@ -44,10 +44,12 @@ export class AddTransactionComponent {
       // console.log(JSON.parse(userData));
       this.transaction.user_id = JSON.parse(userData).id;
     }
-    this.transaction.date = this.today;
+
     this.cashService.getOpenedCashRegister().subscribe({
       next: (data) => {
+        // console.log(data);
         this.transaction.cash_id = data.id;
+        this.transaction.date = data.date;
       },
       error: (err) => console.error(err),
     });
