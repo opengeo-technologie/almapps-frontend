@@ -10,9 +10,17 @@ import { AuthService } from "../../services/auth.service";
   styleUrl: "./main-board.component.css",
 })
 export class MainBoardComponent {
-  constructor(private router: Router, private apiService: AuthService) {
+  activeLink: any = "";
+  constructor(
+    private router: Router,
+    private apiService: AuthService,
+  ) {
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
     // this.userLocation = JSON.parse(localStorage.getItem('userLocation') || '{}');
+  }
+
+  ngOnInit(): void {
+    this.activeLink = this.router.url;
   }
 
   logout() {

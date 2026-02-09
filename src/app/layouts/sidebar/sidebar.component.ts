@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
+declare var M: any;
 
 @Component({
   selector: "app-sidebar",
@@ -18,7 +19,7 @@ export class SidebarComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private route: ActivatedRoute // private location: Location
+    private route: ActivatedRoute, // private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -32,5 +33,11 @@ export class SidebarComponent implements OnInit {
       // console.log(JSON.parse(userData));
       this.user = JSON.parse(userData);
     }
+
+    var elems = document.querySelectorAll(".sidenav");
+    var options = {
+      preventScrolling: true,
+    };
+    M.Sidenav.init(elems, options);
   }
 }

@@ -34,12 +34,12 @@ export class ToolsComponent {
   private navSub?: Subscription;
 
   currentPage = 1;
-  rowsPerPage = 5;
+  rowsPerPage = 10;
 
   constructor(
     private router: Router,
     private toolService: ToolsService,
-    @Inject(PLATFORM_ID) private platformId: object
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
     // this.userLocation = JSON.parse(localStorage.getItem('userLocation') || '{}');
