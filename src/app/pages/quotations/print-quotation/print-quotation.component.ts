@@ -66,7 +66,7 @@ export class PrintQuotationComponent {
     private imageHelper: ImageHelperService,
     private datePipe: DatePipe,
     private currencyPipe: CustomCurrencyPipe,
-    private currencyWordPipe: CurrencyToWOrdPipe
+    private currencyWordPipe: CurrencyToWOrdPipe,
   ) {
     this.loadPdfMake();
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -357,13 +357,12 @@ export class PrintQuotationComponent {
     const imageUrl = "assets/images/almapps-logo.png";
     const formattedDate = this.datePipe.transform(
       this.po.date_op,
-      "dd/MM/yyyy"
+      "dd/MM/yyyy",
     );
 
     try {
-      const base64ImageString = await this.imageHelper.getBase64ImageFromURL(
-        imageUrl
-      );
+      const base64ImageString =
+        await this.imageHelper.getBase64ImageFromURL(imageUrl);
 
       const rotatedImage = await this.rotateBase64Image(base64ImageString, -45);
 
@@ -570,7 +569,7 @@ export class PrintQuotationComponent {
           this.buildItemsTable(),
           {
             text: `Amount in leters: ${this.currencyWordPipe.transform(
-              this.calculateTotal()
+              this.calculateTotal(),
             )} ${this.po.currency_used}`,
             margin: [0, 15, 0, 0],
             bold: true,
@@ -614,6 +613,7 @@ export class PrintQuotationComponent {
             {
               columns: [
                 {
+                  width: "80%",
                   text: `${this.po.company.rc} | ${this.po.company.po_box} | ${this.po.company.phone} | ${this.po.company.email} | ${this.po.company.nui} | ${this.po.company.bank_name} | ${this.po.company.bank_iban} | www.almapps.com`,
                   italics: true,
                   fontSize: 8,
@@ -683,17 +683,17 @@ export class PrintQuotationComponent {
       return Math.round(
         this.calculateTotalWithouxVATDiscount() +
           this.po.delivery_amount +
-          this.calculateVATAmount()
+          this.calculateVATAmount(),
       );
     }
     if (this.po.tva_status && !this.po.discount_status) {
       return Math.round(
-        this.calculateTotalWithouxVAT() + this.calculateVATAmount()
+        this.calculateTotalWithouxVAT() + this.calculateVATAmount(),
       );
     }
     if (this.po.discount_status) {
       return Math.round(
-        this.calculateTotalWithouxVATDiscount() + this.po.delivery_amount
+        this.calculateTotalWithouxVATDiscount() + this.po.delivery_amount,
       );
     }
 

@@ -68,7 +68,7 @@ export class PrintInvoiceComponent {
     private imageHelper: ImageHelperService,
     private datePipe: DatePipe,
     private currencyPipe: CustomCurrencyPipe,
-    private currencyWordPipe: CurrencyToWOrdPipe
+    private currencyWordPipe: CurrencyToWOrdPipe,
   ) {
     this.loadPdfMake();
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -281,7 +281,7 @@ export class PrintInvoiceComponent {
           {
             text: this.currencyPipe.transform(
               item.normal_unit_price,
-              this.invoice.currency_used
+              this.invoice.currency_used,
             ),
             alignment: "right",
             fontSize: 9,
@@ -289,7 +289,7 @@ export class PrintInvoiceComponent {
           {
             text: this.currencyPipe.transform(
               item.normal_unit_price * (item.normal_hour1 + item.normal_hour2),
-              this.invoice.currency_used
+              this.invoice.currency_used,
             ),
             alignment: "right",
             fontSize: 9,
@@ -312,7 +312,7 @@ export class PrintInvoiceComponent {
           {
             text: this.currencyPipe.transform(
               item.overtime_unit_price,
-              this.invoice.currency_used
+              this.invoice.currency_used,
             ),
             alignment: "right",
             fontSize: 9,
@@ -321,7 +321,7 @@ export class PrintInvoiceComponent {
             text: this.currencyPipe.transform(
               item.overtime_unit_price *
                 (item.overtime_hour1 + item.overtime_hour2),
-              this.invoice.currency_used
+              this.invoice.currency_used,
             ),
             alignment: "right",
             fontSize: 9,
@@ -344,7 +344,7 @@ export class PrintInvoiceComponent {
           {
             text: this.currencyPipe.transform(
               item.allowance_unit_price,
-              this.invoice.currency_used
+              this.invoice.currency_used,
             ),
             alignment: "right",
             fontSize: 9,
@@ -353,7 +353,7 @@ export class PrintInvoiceComponent {
             text: this.currencyPipe.transform(
               item.allowance_unit_price *
                 (item.allowance_hour1 + item.allowance_hour2),
-              this.invoice.currency_used
+              this.invoice.currency_used,
             ),
             alignment: "right",
             fontSize: 9,
@@ -538,13 +538,12 @@ export class PrintInvoiceComponent {
     const imageUrl = "assets/images/almapps-logo.png";
     const formattedDate = this.datePipe.transform(
       this.invoice.date_op,
-      "dd/MM/yyyy"
+      "dd/MM/yyyy",
     );
 
     try {
-      const base64ImageString = await this.imageHelper.getBase64ImageFromURL(
-        imageUrl
-      );
+      const base64ImageString =
+        await this.imageHelper.getBase64ImageFromURL(imageUrl);
 
       const rotatedImage = await this.rotateBase64Image(base64ImageString, -45);
 
@@ -751,7 +750,7 @@ export class PrintInvoiceComponent {
           this.buildItemsTable(),
           {
             text: `Amount in letters: ${this.currencyWordPipe.transform(
-              this.calculateTotal()
+              this.calculateTotal(),
             )} ${this.invoice.currency_used}`,
             margin: [0, 15, 0, 0],
             bold: true,
@@ -795,6 +794,7 @@ export class PrintInvoiceComponent {
             {
               columns: [
                 {
+                  width: "80%",
                   text: `${this.invoice.company.rc} | ${this.invoice.company.po_box} | ${this.invoice.company.phone} | ${this.invoice.company.email} | ${this.invoice.company.nui} | ${this.invoice.company.bank_name} | ${this.invoice.company.bank_iban} | www.almapps.com`,
                   italics: true,
                   fontSize: 8,
@@ -870,7 +870,7 @@ export class PrintInvoiceComponent {
 
   calculateTotal(): number {
     return Math.round(
-      this.calculateTotalWithouxVAT() + this.calculateVATAmount()
+      this.calculateTotalWithouxVAT() + this.calculateVATAmount(),
     );
   }
 }

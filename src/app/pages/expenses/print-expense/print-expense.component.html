@@ -135,7 +135,7 @@
               </tbody>
             </table>
             <br />
-            <table>
+            <table *ngIf="expense.tasks[0].job_assign">
               <thead>
                 <tr>
                   <th>Technician name</th>

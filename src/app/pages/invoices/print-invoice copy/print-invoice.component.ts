@@ -59,7 +59,7 @@ export class PrintInvoiceComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private apiService: InvoiceService
+    private apiService: InvoiceService,
   ) {
     this.loadPdfMake();
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -168,7 +168,7 @@ export class PrintInvoiceComponent {
 
   calculateTotal(): number {
     return Math.round(
-      this.calculateTotalWithouxVAT() + this.calculateVATAmount()
+      this.calculateTotalWithouxVAT() + this.calculateVATAmount(),
     );
   }
 }

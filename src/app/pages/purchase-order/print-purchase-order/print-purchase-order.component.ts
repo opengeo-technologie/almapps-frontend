@@ -65,7 +65,7 @@ export class PrintPurchaseOrderComponent {
     private imageHelper: ImageHelperService,
     private datePipe: DatePipe,
     private currencyPipe: CustomCurrencyPipe,
-    private currencyWordPipe: CurrencyToWOrdPipe
+    private currencyWordPipe: CurrencyToWOrdPipe,
   ) {
     this.loadPdfMake();
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -126,30 +126,6 @@ export class PrintPurchaseOrderComponent {
     pdfMake.vfs = pdfFontsModule.default.vfs;
 
     this.pdfMake = pdfMake;
-  }
-
-  async generatePdf() {
-    await this.loadPdfMake(); // Assure que pdfMake est chargé
-
-    const element = this.poDiv.nativeElement as HTMLElement;
-
-    // 1️⃣ Convertir div en canvas
-    const canvas = await html2canvas.default(element, { scale: 2 });
-
-    // 2️⃣ Convertir canvas en image base64
-    const imgData = canvas.toDataURL("image/png", 0.3);
-
-    // 3️⃣ Créer le PDF
-    const docDefinition: TDocumentDefinitions = {
-      content: [
-        { image: imgData, width: 500 }, // Ajuste la largeur
-      ],
-      styles: {
-        header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
-      },
-    };
-
-    this.pdfMake.createPdf(docDefinition).open();
   }
 
   private buildItemsTable(currency: string = "FCFA") {
@@ -267,14 +243,13 @@ export class PrintPurchaseOrderComponent {
     const imageUrl = "assets/images/almapps-logo.png";
     const formattedDate = this.datePipe.transform(
       this.po.date_op,
-      "dd/MM/yyyy"
+      "dd/MM/yyyy",
     );
     console.log(formattedDate);
 
     try {
-      const base64ImageString = await this.imageHelper.getBase64ImageFromURL(
-        imageUrl
-      );
+      const base64ImageString =
+        await this.imageHelper.getBase64ImageFromURL(imageUrl);
 
       const rotatedImage = await this.rotateBase64Image(base64ImageString, -45);
 
@@ -481,7 +456,7 @@ export class PrintPurchaseOrderComponent {
           this.buildItemsTable(),
           {
             text: `Amount in leters: ${this.currencyWordPipe.transform(
-              this.calculateTotal()
+              this.calculateTotal(),
             )} ${this.po.currency_used}`,
             margin: [0, 15, 0, 0],
             bold: true,
@@ -525,6 +500,7 @@ export class PrintPurchaseOrderComponent {
             {
               columns: [
                 {
+                  width: "80%",
                   text: `${this.po.company.rc} | ${this.po.company.po_box} | ${this.po.company.phone} | ${this.po.company.email} | ${this.po.company.nui} | ${this.po.company.bank_name} | ${this.po.company.bank_iban} | www.almapps.com`,
                   italics: true,
                   fontSize: 8,
@@ -587,17 +563,17 @@ export class PrintPurchaseOrderComponent {
       return Math.round(
         this.calculateTotalWithouxVATDiscount() +
           this.po.shipping_amount +
-          this.calculateVATAmount()
+          this.calculateVATAmount(),
       );
     }
     if (this.po.tva_status && !this.po.discount_status) {
       return Math.round(
-        this.calculateTotalWithouxVAT() + this.calculateVATAmount()
+        this.calculateTotalWithouxVAT() + this.calculateVATAmount(),
       );
     }
     if (this.po.discount_status) {
       return Math.round(
-        this.calculateTotalWithouxVATDiscount() + this.po.shipping_amount
+        this.calculateTotalWithouxVATDiscount() + this.po.shipping_amount,
       );
     }
 

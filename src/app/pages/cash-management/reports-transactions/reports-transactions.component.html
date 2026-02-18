@@ -15,7 +15,7 @@
 
   <div class="row" *ngIf="transactions">
     <div class="col s12 m12 center">
-      <button class="btn-small blue" (click)="generatePdf()">
+      <button class="btn-small blue" (click)="generatePdf2()">
         <i class="material-icons">print</i>Print transactions
       </button>
     </div>
@@ -76,21 +76,32 @@
                     <p
                       class="right-align green-text"
                       style="font-weight: bolder"
+                      *ngIf="item.type == 'in'"
                     >
-                      @if (item.type == "in") {
-                        {{ item.amount | customCurrency }}
-                      } @else {
-                        -
-                      }
+                      {{ item.amount | customCurrency }}
+                    </p>
+                    <p
+                      class="right-align green-text"
+                      style="font-weight: bolder"
+                      *ngIf="item.type != 'in'"
+                    >
+                      -
                     </p>
                   </td>
                   <td>
-                    <p class="right-align red-text" style="font-weight: bolder">
-                      @if (item.type == "out") {
-                        {{ item.amount | customCurrency }}
-                      } @else {
-                        -
-                      }
+                    <p
+                      class="right-align red-text"
+                      style="font-weight: bolder"
+                      *ngIf="item.type == 'out'"
+                    >
+                      {{ item.amount | customCurrency }}
+                    </p>
+                    <p
+                      class="right-align red-text"
+                      style="font-weight: bolder"
+                      *ngIf="item.type != 'out'"
+                    >
+                      -
                     </p>
                   </td>
                 </tr>
