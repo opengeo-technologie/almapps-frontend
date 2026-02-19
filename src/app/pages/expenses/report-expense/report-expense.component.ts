@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { BaseComponent } from "../../base/base.component";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { QRCodeComponent } from "angularx-qrcode";
 import { CustomCurrencyPipe } from "../../../pipes/currency.pipe";
@@ -29,6 +29,9 @@ import {
 } from "date-fns";
 import { Router } from "@angular/router";
 import { ExpenseService } from "../../../services/expense.service";
+import { CompanyDetailService } from "../../../services/company-detail.service";
+import { ImageHelperService } from "../../../services/image-helper.service";
+import { AuthService } from "../../../services/auth.service";
 
 interface WeekRange {
   label: string;
@@ -49,6 +52,7 @@ interface WeekRange {
   ],
   templateUrl: "./report-expense.component.html",
   styleUrl: "./report-expense.component.css",
+  providers: [DatePipe, CustomCurrencyPipe, CurrencyToWOrdPipe],
 })
 export class ReportExpenseComponent {
   @ViewChild("selectYear") selectYear!: ElementRef;
@@ -60,6 +64,7 @@ export class ReportExpenseComponent {
 
   expense: any | undefined;
   user: any | undefined;
+  company: any | undefined;
   expenses: any[] = [];
 
   years: number[] = [];
@@ -87,8 +92,26 @@ export class ReportExpenseComponent {
     },
   ];
 
-  constructor(private router: Router, private expenseService: ExpenseService) {
-    this.user = JSON.parse(localStorage.getItem("user") || "{}");
+  constructor(
+    private router: Router,
+    private expenseService: ExpenseService,
+    private companyService: CompanyDetailService,
+    private imageHelper: ImageHelperService,
+    private datePipe: DatePipe,
+    private currencyPipe: CustomCurrencyPipe,
+    private currencyWordPipe: CurrencyToWOrdPipe,
+    private authService: AuthService,
+  ) {
+    const userData = this.authService.getUser();
+    if (userData) {
+      // console.log(JSON.parse(userData));
+      this.user = JSON.parse(userData);
+    }
+
+    this.companyService.getActiveCompanyDetail().subscribe((company) => {
+      // console.log(transactions);
+      this.company = company;
+    });
     this.loadPdfMake();
   }
 
@@ -144,7 +167,7 @@ export class ReportExpenseComponent {
 
     const weekStarts = eachWeekOfInterval(
       { start, end },
-      { weekStartsOn: 1 } // Monday
+      { weekStartsOn: 1 }, // Monday
     );
 
     const label = `${format(start, "MMM dd")} – ${format(end, "MMM dd")}`;
@@ -171,7 +194,7 @@ export class ReportExpenseComponent {
 
       const label = `${format(weekStart, "MMM dd")} – ${format(
         weekEnd,
-        "MMM dd"
+        "MMM dd",
       )}`;
 
       const existingGroup = this.groupedWeeks.find((g) => g.month === month);
@@ -277,7 +300,7 @@ export class ReportExpenseComponent {
   calculateTotalInvoice(): number {
     return Math.round(
       this.calculateTotalWithouxVAT(this.expense.invoice) +
-        this.calculateVATAmount()
+        this.calculateVATAmount(),
     );
   }
   calculateTotalExpense(): number {
@@ -316,28 +339,260 @@ export class ReportExpenseComponent {
     this.pdfMake = pdfMake;
   }
 
-  async generatePdf() {
-    await this.loadPdfMake(); // Assure que pdfMake est chargé
+  rotateBase64Image(base64: string, angle: number): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64;
 
-    const element = this.poDiv.nativeElement as HTMLElement;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d")!;
 
-    // 1️⃣ Convertir div en canvas
-    const canvas = await html2canvas.default(element, { scale: 2 });
+        if (angle === 90 || angle === -90) {
+          canvas.width = img.height;
+          canvas.height = img.width;
+        } else {
+          canvas.width = img.width;
+          canvas.height = img.height;
+        }
 
-    // 2️⃣ Convertir canvas en image base64
-    const imgData = canvas.toDataURL("image/png", 0.3);
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate((angle * Math.PI) / 180);
+        ctx.drawImage(img, -img.width / 2, -img.height / 2);
 
-    // 3️⃣ Créer le PDF
-    const docDefinition: TDocumentDefinitions = {
-      content: [
-        { image: imgData, width: 500 }, // Ajuste la largeur
+        resolve(canvas.toDataURL());
+      };
+    });
+  }
+
+  private buildTasksTable() {
+    let body: any[] = [];
+    let widths: any[] = [];
+    widths = ["*", "*"];
+    body = [
+      [
+        {
+          text: "Task",
+          bold: true,
+          fontSize: 11,
+        },
+        {
+          text: "Amount",
+          alignment: "right",
+          bold: true,
+          fontSize: 11,
+        },
       ],
-      styles: {
-        header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
+    ];
+
+    this.expense.tasks.forEach((item: any, index: any) => {
+      body.push([
+        {
+          text: item.task,
+          bold: true,
+          fontSize: 10,
+        },
+        {
+          text: this.currencyPipe.transform(item.amount),
+          alignment: "right",
+          fontSize: 10,
+        },
+      ]);
+    });
+    body.push([
+      {
+        text: "Total",
+        alignment: "right",
+        bold: true,
+        fontSize: 10,
+      },
+      {
+        text: this.currencyPipe.transform(this.calculateTotalExpense()),
+        alignment: "right",
+        bold: true,
+        color: "#000000",
+        fontSize: 10,
+      },
+    ]);
+
+    return {
+      table: {
+        widths: widths,
+        body,
+      },
+      layout: {
+        hLineWidth: (i: number) => (i === 0 || i === body.length ? 1 : 0.5),
+        vLineWidth: () => 0.5,
+        hLineColor: () => "#CCCCCC",
+        vLineColor: () => "#CCCCCC",
+        paddingLeft: () => 8,
+        paddingRight: () => 8,
+        paddingTop: () => 6,
+        paddingBottom: () => 6,
       },
     };
+  }
 
-    this.pdfMake.createPdf(docDefinition).open();
+  async generatePdf2() {
+    await this.loadPdfMake(); // Assure que pdfMake est chargé
+    const imageUrl = "assets/images/almapps-logo.png";
+    const formattedDate = this.datePipe.transform(
+      this.expense.date,
+      "dd/MM/yyyy",
+    );
+
+    try {
+      const base64ImageString =
+        await this.imageHelper.getBase64ImageFromURL(imageUrl);
+
+      const rotatedImage = await this.rotateBase64Image(base64ImageString, -45);
+
+      const docDefinition = {
+        pageSize: "A4",
+        pageMargins: [40, 60, 40, 80],
+
+        background: [
+          {
+            image: rotatedImage,
+            width: 300, // A4 width
+            height: 600, // A4 height
+            absolutePosition: { x: 100, y: 50 },
+            opacity: 0.07,
+          },
+        ],
+        header: (currentPage: number) => {
+          return {
+            margin: [0, 0, 0, 0],
+            stack: [
+              {
+                canvas: [
+                  {
+                    type: "rect",
+                    x: 0,
+                    y: 0,
+                    w: 595, // A4 width
+                    h: 50, // header height
+                    color: "#bdbdbd",
+                  },
+                ],
+              },
+              {
+                columns: [
+                  {
+                    image: base64ImageString,
+                    width: 100,
+                    margin: [0, 2, 0, 0],
+                    absolutePosition: { y: 15 },
+                    alignment: "center",
+                  },
+                ],
+              },
+            ],
+          };
+        },
+
+        content: [
+          {
+            text: "EXPENSE REPORT",
+            alignment: "center",
+            fontSize: 18,
+            bold: true,
+            color: "#1E3A8A",
+          },
+          { text: "", margin: [0, 30, 0, 0] },
+          // ... more details
+          {
+            margin: [0, 0, 0, 10],
+            stack: [
+              {
+                canvas: [
+                  {
+                    type: "rect",
+                    x: 0,
+                    y: 0,
+                    w: 515, // A4 width
+                    h: 20, // header height
+                    color: "#bdbdbd",
+                  },
+                ],
+              },
+              {
+                text: `${this.expense.label}`,
+                margin: [0, 2, 0, 0],
+                absolutePosition: { y: 148 },
+                alignment: "center",
+                bold: true,
+                color: "#000000",
+                fontSize: 12,
+              },
+            ],
+          },
+          this.buildTasksTable(),
+          {
+            text: `Amount in letters: ${this.currencyWordPipe.transform(
+              this.calculateTotalExpense(),
+            )} FCFA`,
+            margin: [0, 15, 0, 0],
+            bold: true,
+            fontSize: 12,
+          },
+          { text: "", margin: [0, 65, 0, 0] },
+          {
+            text: `Printed by: ${this.user.username}`,
+            margin: [0, 0, 0, 0],
+            italics: true,
+            alignment: "right",
+            fontSize: 6,
+          },
+        ],
+        styles: {
+          header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
+          subheader: { fontSize: 14, bold: true, margin: [0, 10, 0, 5] },
+          total: { bold: true, marginTop: 20 },
+        },
+        // Optional: Add page numbers in the footer
+        footer: (currentPage: number, pageCount: number) => ({
+          margin: [40, 0, 40, 20],
+          stack: [
+            {
+              canvas: [
+                {
+                  type: "line",
+                  x1: 0,
+                  y1: 0,
+                  x2: 515, // A4 width minus margins
+                  y2: 0,
+                  lineWidth: 1,
+                  lineColor: "#9CA3AF",
+                },
+              ],
+            },
+            {
+              columns: [
+                {
+                  width: "80%",
+                  text: `${this.company.rc} | ${this.company.po_box} | ${this.company.phone} | ${this.company.email} | ${this.company.nui} | ${this.company.bank_name} | ${this.company.bank_iban} | www.almapps.com`,
+                  italics: true,
+                  fontSize: 8,
+                  margin: [5, 5, 0, 0],
+                  color: "#616161",
+                },
+                {
+                  text: `${currentPage} of ${pageCount}`,
+                  alignment: "right",
+                  fontSize: 8,
+                  margin: [5, 5, 0, 0],
+                  color: "#616161",
+                },
+              ],
+            },
+          ],
+        }),
+      };
+      this.pdfMake.createPdf(docDefinition).open();
+    } catch (error) {
+      console.error("Printing error: ", error);
+    }
   }
 
   onSubmit() {
