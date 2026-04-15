@@ -40,7 +40,7 @@ export class TransactionsComponent {
   constructor(
     private router: Router,
     private cashService: CashManagementService,
-    @Inject(PLATFORM_ID) private platformId: object
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
     // this.userLocation = JSON.parse(localStorage.getItem('userLocation') || '{}');
@@ -69,6 +69,7 @@ export class TransactionsComponent {
   loadData() {
     this.cashService.getTransactions().subscribe({
       next: (data) => {
+        console.log(data);
         this.data = this.sortByDateDesc(data);
       },
       error: (err) => console.error(err),
@@ -77,7 +78,7 @@ export class TransactionsComponent {
 
   sortByDateDesc(data: any[]) {
     return data.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
   }
 
@@ -131,6 +132,21 @@ export class TransactionsComponent {
   closeModal() {
     this.instanceModal.close();
   }
+
+  // registerStatus(register_id: number): string {
+  //   this.cashService.getCashRegister(register_id).subscribe({
+  //     next: (data) => {
+  //       if (data.status == "open") {
+  //         return "open";
+  //       } else if (data.status == "closed") {
+  //         return "closed";
+  //       } else {
+  //         return data.status;
+  //       }
+  //     },
+  //     error: (err) => "unknown",
+  //   });
+  // }
 
   deleteTransaction() {
     this.cashService.deleteTransaction(this.dataToDelete).subscribe({

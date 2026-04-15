@@ -49,6 +49,14 @@
                         class="waves-effect waves-light btn btn-small red darken-4"
                         title="Delete client"
                         (click)="confirmDeleteClient(item)"
+                        *ngIf="item.invoices.length == 0"
+                        ><i class="material-icons">delete</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small disabled-link red darken-4"
+                        title="Delete client"
+                        (click)="confirmDeleteClient(item)"
+                        *ngIf="item.invoices.length != 0"
                         ><i class="material-icons">delete</i></a
                       >
                     </div>

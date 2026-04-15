@@ -134,4 +134,30 @@
       </div>
     </div>
   </div>
+
+  <!-- Delete Quotation -->
+  <div id="confirmDelete" class="modal">
+    <div class="modal-content">
+      <h4 class="center red-text">Confirm quotation delete?</h4>
+      <p *ngIf="itemToDelete" class="center teal-text darken-4">
+        {{ itemToDelete.reference }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="delete()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
 </main>

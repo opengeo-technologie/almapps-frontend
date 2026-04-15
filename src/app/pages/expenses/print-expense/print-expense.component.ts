@@ -159,7 +159,7 @@ export class PrintExpenseComponent {
       body.push([
         {
           text: item.task,
-          bold: true,
+          // bold: true,
           fontSize: 10,
         },
         {

@@ -19,6 +19,6 @@ export class NavbarComponent {
 
   ngOnInit(): void {
     this.activeLink = this.router.url;
-    console.log(this.activeLink);
+    // console.log(this.activeLink);
   }
 }

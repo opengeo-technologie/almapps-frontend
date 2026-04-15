@@ -38,17 +38,16 @@
                   <td>{{ item.amount | customCurrency }}</td>
                   <td>
                     <div class="btn-group" role="group">
-                      <a
+                      <!-- <a
                         class="waves-effect waves-light btn btn-small"
                         title="Edit client"
                         (click)="editTransaction(item)"
                         *ngIf="item.cash.status == 'open'"
                         ><i class="material-icons">edit</i></a
-                      >
+                      > -->
                       <a
                         class="waves-effect waves-light btn btn-small disabled-link"
                         title="Edit client"
-                        *ngIf="item.cash.status == 'closed'"
                         ><i class="material-icons">edit</i></a
                       >
                       <a
@@ -61,22 +60,21 @@
                         class="waves-effect waves-light btn btn-small red darken-4"
                         title="Delete client"
                         (click)="confirmDeleteClient(item)"
-                        *ngIf="item.cash.status == 'open'"
                         ><i class="material-icons">delete</i></a
                       >
-                      <a
+                      <!-- <a
                         class="waves-effect waves-light btn btn-small red darken-4 disabled-link"
                         title="Delete client"
                         *ngIf="item.cash.status == 'closed'"
                         ><i class="material-icons">delete</i></a
-                      >
+                      > -->
                     </div>
                   </td>
                 </tr>
               </tbody>
               <tbody *ngIf="paginatedData.length == 0">
                 <tr>
-                  <td colspan="4">
+                  <td colspan="5">
                     <i class="center">No data available</i>
                   </td>
                 </tr>

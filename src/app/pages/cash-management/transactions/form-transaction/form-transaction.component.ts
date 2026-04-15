@@ -4,6 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { ToolsService } from "../../../../services/tools.service";
 import { CashManagementService } from "../../../../services/cash-management.service";
+import { CashRegisterService } from "../../../../services/cash-register.service";
 declare var M: any;
 
 @Component({
@@ -22,8 +23,8 @@ export class FormTransactionComponent {
   ];
 
   constructor(
-    private cashService: CashManagementService,
-    private router: Router
+    private cashService: CashRegisterService,
+    private router: Router,
   ) {
     this.isAddForm = this.router.url.includes("add");
   }

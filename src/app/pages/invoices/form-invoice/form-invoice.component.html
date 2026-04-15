@@ -146,7 +146,7 @@
 
             <div class="form-input">
               <label for="duration"
-                >Duration <span class="red-text">(*)</span></label
+                >Quantity <span class="red-text">(*)</span></label
               >
               <div class="input-field">
                 <input
@@ -641,7 +641,7 @@
           type="submit"
           *ngIf="isAddForm"
           class="waves-effect waves-light btn"
-          [disabled]="!clientForm.form.valid"
+          [disabled]="!clientForm.form.valid || disableSaveBtn()"
         >
           <i class="material-icons">save</i>
           Save

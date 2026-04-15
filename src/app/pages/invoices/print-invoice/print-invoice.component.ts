@@ -136,12 +136,12 @@ export class PrintInvoiceComponent {
     let widths: any[] = [];
     let grandTotal = 0;
     if (this.invoice.jobs.length != 0) {
-      widths = ["auto", "*", "auto", "auto", "auto"];
+      widths = ["auto", "*", "auto", "*", "*"];
       body = [
         [
           { text: "#", bold: true, fontSize: 11 },
           { text: "Job", bold: true, fontSize: 11 },
-          { text: "Duration", bold: true, fontSize: 11 },
+          { text: "Quantity", bold: true, fontSize: 11 },
           { text: "Unit Price", bold: true, fontSize: 11 },
           { text: "Total", bold: true, fontSize: 11 },
         ],
@@ -427,7 +427,7 @@ export class PrintInvoiceComponent {
         },
       ]);
     } else {
-      widths = ["auto", "*", "auto", "auto", "auto"];
+      widths = ["auto", "*", "auto", "*", "*"];
       body = [
         [
           { text: "#", bold: true, fontSize: 11 },
@@ -531,6 +531,19 @@ export class PrintInvoiceComponent {
         paddingBottom: () => 6,
       },
     };
+  }
+
+  private showInvoiceHeading() {
+    if (this.invoice.has_heading) {
+      return {
+        text: this.invoice.heading,
+        alignment: "center",
+        fontSize: 12,
+        bold: true,
+      };
+    } else {
+      return {};
+    }
   }
 
   async generatePdf() {
@@ -745,8 +758,10 @@ export class PrintInvoiceComponent {
               ],
             ],
           },
-          { text: "", margin: [0, 60, 0, 0] },
+          { text: "", margin: [0, 40, 0, 0] },
           // ... more details
+          this.showInvoiceHeading(),
+          { text: "", margin: [0, 10, 0, 0] },
           this.buildItemsTable(),
           {
             text: `Amount in letters: ${this.currencyWordPipe.transform(

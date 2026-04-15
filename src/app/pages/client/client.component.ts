@@ -38,7 +38,7 @@ export class ClientComponent {
   constructor(
     private router: Router,
     private clientService: ClientService,
-    @Inject(PLATFORM_ID) private platformId: object
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
     // this.userLocation = JSON.parse(localStorage.getItem('userLocation') || '{}');
@@ -66,7 +66,10 @@ export class ClientComponent {
 
   loadData() {
     this.clientService.getClients().subscribe({
-      next: (data) => (this.clients = data),
+      next: (data) => {
+        // console.log(data);
+        this.clients = data;
+      },
       error: (err) => console.error(err),
     });
   }

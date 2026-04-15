@@ -15,9 +15,21 @@
 
   <div class="row" *ngIf="po">
     <div class="col s12 m12 center">
-      <button class="btn-small blue" (click)="generatePdf2()">
-        <i class="material-icons">print</i>Print purchase order
-      </button>
+      <div class="btn-group" role="group">
+        <a
+          class="waves-effect waves-light btn btn-small blue"
+          title="Edit purchase order"
+          (click)="generatePdf2()"
+          ><i class="material-icons">print</i>Print</a
+        >
+        <a
+          class="waves-effect waves-light btn btn-small green"
+          title="Edit purchase order"
+          (click)="confirmValidation(po)"
+          *ngIf="!po.status"
+          ><i class="material-icons">check</i>Validate</a
+        >
+      </div>
     </div>
     <div class="col m1"></div>
     <div class="col s12 m10">
@@ -275,6 +287,31 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Validate Purchase order -->
+  <div id="validatePo" class="modal">
+    <div class="modal-content">
+      <h4 class="center green-text">Validate purchase order?</h4>
+      <p *ngIf="poToValidate" class="center teal-text darken-4">
+        {{ poToValidate.reference }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="validate()"
+      >
+        Yes
+      </button>
     </div>
   </div>
 </main>

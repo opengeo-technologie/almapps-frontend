@@ -14,6 +14,7 @@ import type { TDocumentDefinitions } from "pdfmake/interfaces";
 import * as html2canvas from "html2canvas";
 import { QuotationService } from "../../../services/quotation.service";
 import { ImageHelperService } from "../../../services/image-helper.service";
+declare var M: any;
 
 @Component({
   selector: "app-print-quotation",
@@ -35,6 +36,9 @@ export class PrintQuotationComponent {
   private pdfMake: typeof pdfMakeType | null = null;
   showQr = false;
   @ViewChild("poDiv") poDiv!: ElementRef;
+
+  instanceModal: any;
+  itemToValidate: any;
 
   submenus: any[] = [
     {
@@ -89,6 +93,16 @@ export class PrintQuotationComponent {
   ngAfterViewInit() {
     // s’assure que c’est côté client
     this.showQr = true;
+    this.initModals();
+  }
+
+  initModals() {
+    const elem = document.getElementById("validatePo");
+    // console.log(elem);
+    const options = {
+      dismissible: false,
+    };
+    this.instanceModal = M.Modal.init(elem, options);
   }
 
   private async loadPdfMake() {
@@ -103,28 +117,9 @@ export class PrintQuotationComponent {
     this.pdfMake = pdfMake;
   }
 
-  async generatePdf() {
-    await this.loadPdfMake(); // Assure que pdfMake est chargé
-
-    const element = this.poDiv.nativeElement as HTMLElement;
-
-    // 1️⃣ Convertir div en canvas
-    const canvas = await html2canvas.default(element, { scale: 2 });
-
-    // 2️⃣ Convertir canvas en image base64
-    const imgData = canvas.toDataURL("image/png", 0.3);
-
-    // 3️⃣ Créer le PDF
-    const docDefinition: TDocumentDefinitions = {
-      content: [
-        { image: imgData, width: 500 }, // Ajuste la largeur
-      ],
-      styles: {
-        header: { fontSize: 18, bold: true, margin: [0, 0, 0, 10] },
-      },
-    };
-
-    this.pdfMake.createPdf(docDefinition).open();
+  confirmValidation(item: any) {
+    this.itemToValidate = item;
+    this.instanceModal.open();
   }
 
   rotateBase64Image(base64: string, angle: number): Promise<string> {
@@ -568,7 +563,7 @@ export class PrintQuotationComponent {
           // ... more details
           this.buildItemsTable(),
           {
-            text: `Amount in leters: ${this.currencyWordPipe.transform(
+            text: `Amount in letters: ${this.currencyWordPipe.transform(
               this.calculateTotal(),
             )} ${this.po.currency_used}`,
             margin: [0, 15, 0, 0],
@@ -698,5 +693,25 @@ export class PrintQuotationComponent {
     }
 
     return Math.round(this.calculateTotalWithouxVAT());
+  }
+
+  validate() {
+    this.itemToValidate.status = true;
+    this.apiService.updateQuotation(this.itemToValidate).subscribe({
+      next: (data) => {
+        // console.log(data);
+        if (data.status == 206) {
+          // Handle the response from the server
+          M.toast({
+            html: `Quotation reference ${this.po.reference} validated successfully....`,
+            classes: "rounded green accent-4",
+            inDuration: 500,
+            outDuration: 575,
+          });
+          this.router.navigate(["/quotations/list"]);
+        }
+      },
+      error: (err) => console.error(err),
+    });
   }
 }

@@ -8,6 +8,7 @@ import { TechnicianService } from "../../services/technician.service";
 import { FormsModule } from "@angular/forms";
 import { PurchaseOrderService } from "../../services/purchase-order.service";
 import { CustomCurrencyPipe } from "../../pipes/currency.pipe";
+import { AuthService } from "../../services/auth.service";
 declare var M: any;
 
 @Component({
@@ -51,10 +52,11 @@ export class PurchaseOrderComponent {
   roles: any[] = [];
   purchase_orders: any[] = [];
   instanceModal: any;
-  techToDelete: any;
+  poToDelete: any;
   newTechModal: any;
   private navSub?: Subscription;
   isAddForm: boolean = true;
+  user: any | undefined;
 
   currentPage = 1;
   rowsPerPage = 10;
@@ -62,7 +64,8 @@ export class PurchaseOrderComponent {
   constructor(
     private router: Router,
     private apiService: PurchaseOrderService,
-    @Inject(PLATFORM_ID) private platformId: object
+    private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
     // this.userLocation = JSON.parse(localStorage.getItem('userLocation') || '{}');
@@ -85,6 +88,11 @@ export class PurchaseOrderComponent {
           this.initModals();
         }
       });
+    }
+    const userData = this.authService.getUser();
+    if (userData) {
+      // console.log(JSON.parse(userData));
+      this.user = JSON.parse(userData);
     }
   }
 
@@ -169,8 +177,8 @@ export class PurchaseOrderComponent {
     this.router.navigate(["/purchase-order/print", po.id]);
   }
 
-  confirmDelete(tech: any) {
-    this.techToDelete = tech;
+  confirmDelete(item: any) {
+    this.poToDelete = item;
     this.instanceModal.open();
   }
 
@@ -214,20 +222,42 @@ export class PurchaseOrderComponent {
       return Math.round(
         this.calculateTotalWithouxVATDiscount(po) +
           po.shipping_amount +
-          this.calculateVATAmount(po)
+          this.calculateVATAmount(po),
       );
     }
     if (po.tva_status && !po.discount_status) {
       return Math.round(
-        this.calculateTotalWithouxVAT(po) + this.calculateVATAmount(po)
+        this.calculateTotalWithouxVAT(po) + this.calculateVATAmount(po),
       );
     }
     if (po.discount_status) {
       return Math.round(
-        this.calculateTotalWithouxVATDiscount(po) + po.shipping_amount
+        this.calculateTotalWithouxVATDiscount(po) + po.shipping_amount,
       );
     }
 
     return Math.round(this.calculateTotalWithouxVAT(po));
+  }
+
+  delete() {
+    // console.log(this.poToDelete);
+    this.poToDelete.on_delete = true;
+    this.poToDelete.user_id_del = this.user.id;
+    this.apiService.updatePurchaseOrder(this.poToDelete).subscribe({
+      next: (data) => {
+        // console.log(data);
+        if (data.status == 206) {
+          // Handle the response from the server
+          this.loadData();
+          M.toast({
+            html: "Data deleted successfully....",
+            classes: "rounded red accent-4",
+            inDuration: 500,
+            outDuration: 575,
+          });
+        }
+      },
+      error: (err) => console.error(err),
+    });
   }
 }

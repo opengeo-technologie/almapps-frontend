@@ -5,6 +5,7 @@
       <a
         class="waves-effect waves-light btn-small light-blue darken-4"
         (click)="openNewRegister()"
+        *ngIf="!checkIfOpenedRegister()"
         ><i class="left"
           ><img
             src="../../../assets/css/flaticon/svg/cash-register.svg"
@@ -49,24 +50,16 @@
                     <div class="btn-group" role="group">
                       <a
                         class="waves-effect waves-light red btn btn-small"
-                        (click)="openCloseRegister()"
+                        (click)="openCloseRegister(item.id)"
                         *ngIf="item.status == 'open'"
                         ><i class="material-icons">close</i></a
                       >
                       <a
-                        class="waves-effect waves-light red btn btn-small disabled-link"
-                        *ngIf="item.status == 'closed'"
-                        ><i class="material-icons">close</i></a
-                      >
-                      <a
-                        class="waves-effect waves-light amber btn btn-small"
+                        class="waves-effect waves-light green btn btn-small"
+                        [ngClass]="disabledLink(item)"
                         (click)="reopenRegisterTransactions(item.id)"
-                        *ngIf="validateReopen(item)"
-                        ><i
-                          ><img
-                            [src]="'assets/css/flaticon/svg/form.svg'"
-                            alt="" /></i
-                      ></a>
+                        ><i class="material-icons">edit</i></a
+                      >
                       <a
                         class="waves-effect waves-light grey darken-2 btn btn-small"
                         title="Edit client"
@@ -201,6 +194,26 @@
         Close register of date
         <b>{{ openedRegister.date | date: "dd-MM-YYYY" }}</b>
       </p>
+      <form action="" #closingForm="ngForm">
+        <div class="col s12 m12">
+          <div class="form-input">
+            <label for="closing_balance"
+              >Closing amount <span class="red-text">(*)</span></label
+            >
+            <div class="input-field">
+              <input
+                type="text"
+                class="form-control"
+                id="closing_balance"
+                name="closing_balance"
+                [(ngModel)]="closing_balance"
+                #closing="ngModel"
+                required
+              />
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
     <div class="modal-footer">
       <button
@@ -216,6 +229,107 @@
         (click)="closeRegister()"
       >
         Confirm
+      </button>
+    </div>
+  </div>
+
+  <div id="openRegister" class="modal modal-open-register">
+    <div class="modal-content">
+      <h4 class="center black-text">Open cash register</h4>
+      <hr />
+      <div class="row">
+        <div class="col s12 m12">
+          <form action="">
+            <div class="col s12 m12">
+              <!-- Years -->
+              <div class="form-input">
+                <label for="year">Year <span class="red-text">(*)</span></label>
+                <select
+                  class="browser-default"
+                  name="year"
+                  id="year"
+                  [(ngModel)]="selected_year"
+                  (ngModelChange)="onYearChange()"
+                  required
+                >
+                  <option [ngValue]="null" disabled>Select year</option>
+                  <option *ngFor="let item of years" [ngValue]="item">
+                    {{ item }}
+                  </option>
+                </select>
+              </div>
+              <!-- Months -->
+              <div class="form-input">
+                <label for="month"
+                  >Month <span class="red-text">(*)</span></label
+                >
+                <select
+                  class="browser-default"
+                  name="month"
+                  id="month"
+                  [(ngModel)]="selected_month"
+                  (ngModelChange)="onMonthChange()"
+                  required
+                >
+                  <option [ngValue]="null" disabled>Select month</option>
+                  <option *ngFor="let item of months" [ngValue]="item.value">
+                    {{ item.label }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-input">
+                <label for="date_op"
+                  >Date <span class="red-text">(*)</span></label
+                >
+                <div class="input-field">
+                  <input
+                    type="text"
+                    class="datepicker"
+                    id="date_op"
+                    name="date_op"
+                    [(ngModel)]="selected_date"
+                    #date_op="ngModel"
+                    [min]="minDate"
+                    [max]="maxDate"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-input">
+                <label for="opening_amount"
+                  >Opening amount <span class="red-text">(*)</span></label
+                >
+                <div class="input-field">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="opening_amount"
+                    name="opening_amount"
+                    [(ngModel)]="opening_amount_input"
+                    #opening_amount="ngModel"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="createCashDesk()"
+      >
+        Open cashDesk
       </button>
     </div>
   </div>

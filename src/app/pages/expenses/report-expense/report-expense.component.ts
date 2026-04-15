@@ -368,11 +368,21 @@ export class ReportExpenseComponent {
   private buildTasksTable() {
     let body: any[] = [];
     let widths: any[] = [];
-    widths = ["*", "*"];
+    widths = ["*", "*", "*", "*"];
     body = [
       [
         {
-          text: "Task",
+          text: "Expense reference",
+          bold: true,
+          fontSize: 11,
+        },
+        {
+          text: "Expense label",
+          bold: true,
+          fontSize: 11,
+        },
+        {
+          text: "Date",
           bold: true,
           fontSize: 11,
         },
@@ -385,10 +395,21 @@ export class ReportExpenseComponent {
       ],
     ];
 
-    this.expense.tasks.forEach((item: any, index: any) => {
+    this.expenses.forEach((item: any, index: any) => {
+      const formattedDate = this.datePipe.transform(item.date, "dd-MM-yyyy");
       body.push([
         {
-          text: item.task,
+          text: item.reference,
+          bold: true,
+          fontSize: 10,
+        },
+        {
+          text: item.label,
+          bold: true,
+          fontSize: 10,
+        },
+        {
+          text: formattedDate,
           bold: true,
           fontSize: 10,
         },
@@ -403,14 +424,18 @@ export class ReportExpenseComponent {
       {
         text: "Total",
         alignment: "right",
+        colSpan: 3,
         bold: true,
         fontSize: 10,
       },
+      {},
+      {},
       {
         text: this.currencyPipe.transform(this.calculateTotalExpense()),
         alignment: "right",
         bold: true,
-        color: "#000000",
+        fillColor: "#4caf50",
+        color: "#ffffff",
         fontSize: 10,
       },
     ]);
@@ -436,10 +461,6 @@ export class ReportExpenseComponent {
   async generatePdf2() {
     await this.loadPdfMake(); // Assure que pdfMake est chargé
     const imageUrl = "assets/images/almapps-logo.png";
-    const formattedDate = this.datePipe.transform(
-      this.expense.date,
-      "dd/MM/yyyy",
-    );
 
     try {
       const base64ImageString =
@@ -517,12 +538,12 @@ export class ReportExpenseComponent {
                 ],
               },
               {
-                text: `${this.expense.label}`,
-                margin: [0, 2, 0, 0],
-                absolutePosition: { y: 148 },
+                text: `${this.reportTitle()}`,
+                margin: [100, 2, 0, 0],
+                absolutePosition: { y: 115 },
                 alignment: "center",
                 bold: true,
-                color: "#000000",
+                color: "#0d47a1",
                 fontSize: 12,
               },
             ],

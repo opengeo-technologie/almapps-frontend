@@ -394,7 +394,7 @@ export class PrintPaymentComponent {
           // ... more details
           this.buildClosingStatsTable(),
           {
-            text: `Amount in leters: ${this.currencyWordPipe.transform(
+            text: `Amount in letters: ${this.currencyWordPipe.transform(
               this.payment.amount,
             )} FCFA`,
             margin: [0, 15, 0, 0],

@@ -13,6 +13,7 @@ import type * as pdfFontsType from "pdfmake/build/vfs_fonts";
 import type { TDocumentDefinitions } from "pdfmake/interfaces";
 import * as html2canvas from "html2canvas";
 import { ImageHelperService } from "../../../services/image-helper.service";
+declare var M: any;
 
 @Component({
   selector: "app-print-purchase-order",
@@ -34,6 +35,9 @@ export class PrintPurchaseOrderComponent {
   private pdfMake: typeof pdfMakeType | null = null;
   showQr = false;
   @ViewChild("poDiv") poDiv!: ElementRef;
+
+  instanceModal: any;
+  poToValidate: any;
 
   submenus: any[] = [
     {
@@ -83,11 +87,21 @@ export class PrintPurchaseOrderComponent {
     } else {
       this.po = undefined;
     }
+    this.initModals();
   }
 
   ngAfterViewInit() {
     // s’assure que c’est côté client
     this.showQr = true;
+  }
+
+  initModals() {
+    const elem = document.getElementById("validatePo");
+    // console.log(elem);
+    const options = {
+      dismissible: false,
+    };
+    this.instanceModal = M.Modal.init(elem, options);
   }
 
   rotateBase64Image(base64: string, angle: number): Promise<string> {
@@ -455,7 +469,7 @@ export class PrintPurchaseOrderComponent {
           // ... more details
           this.buildItemsTable(),
           {
-            text: `Amount in leters: ${this.currencyWordPipe.transform(
+            text: `Amount in letters: ${this.currencyWordPipe.transform(
               this.calculateTotal(),
             )} ${this.po.currency_used}`,
             margin: [0, 15, 0, 0],
@@ -578,5 +592,31 @@ export class PrintPurchaseOrderComponent {
     }
 
     return Math.round(this.calculateTotalWithouxVAT());
+  }
+
+  confirmValidation(item: any) {
+    this.poToValidate = item;
+    this.instanceModal.open();
+  }
+
+  validate() {
+    // console.log(this.poToDelete);
+    this.poToValidate.status = true;
+    this.apiService.updatePurchaseOrder(this.poToValidate).subscribe({
+      next: (data) => {
+        // console.log(data);
+        if (data.status == 206) {
+          // Handle the response from the server
+          M.toast({
+            html: `Purchase order reference ${this.po.reference} validated successfully....`,
+            classes: "rounded green accent-4",
+            inDuration: 500,
+            outDuration: 575,
+          });
+          this.router.navigate(["/purchase-orders/list"]);
+        }
+      },
+      error: (err) => console.error(err),
+    });
   }
 }

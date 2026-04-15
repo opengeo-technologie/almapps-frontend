@@ -114,7 +114,7 @@ export class FormInvoiceComponent {
     private jobService: JobsService,
     private techService: TechnicianService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.isAddForm = this.router.url.includes("add");
     this.clientService.getClients().subscribe((clients: any[]) => {
@@ -170,7 +170,7 @@ export class FormInvoiceComponent {
     } else {
       // console.log(this.invoice);
       this.invoice.currency = this.currencies.find(
-        (el: any) => el.id == this.invoice.currency_used
+        (el: any) => el.id == this.invoice.currency_used,
       );
       this.isVAT = this.invoice.tva_status;
       this.hasHeading = this.invoice.has_heading;
@@ -215,11 +215,32 @@ export class FormInvoiceComponent {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
+  disableSaveBtn() {
+    if (this.invoice.type == null) {
+      return true;
+    }
+    if (this.invoice.type.id == 1 && this.jobs_list.length == 0) {
+      return true;
+    }
+
+    if (this.invoice.type.id == 2 && this.invoice_technicians.length == 0) {
+      return true;
+    }
+
+    if (this.invoice.type.id == 3 && this.order_product.length == 0) {
+      return true;
+    }
+
+    return false;
+  }
+
   get filteredProducts() {
     let data = [...this.products];
     return data.filter(
       (itemA) =>
-        !this.order_products_list.some((itemB) => itemB.product.id === itemA.id)
+        !this.order_products_list.some(
+          (itemB) => itemB.product.id === itemA.id,
+        ),
     );
   }
 
@@ -228,8 +249,8 @@ export class FormInvoiceComponent {
     return data.filter(
       (itemA) =>
         !this.invoice_technician_list.some(
-          (itemB) => itemB.technician.id === itemA.id
-        )
+          (itemB) => itemB.technician.id === itemA.id,
+        ),
     );
   }
 
@@ -311,12 +332,12 @@ export class FormInvoiceComponent {
       };
     } else {
       const new_job = this.removed_from_jobs_list.find(
-        (itemA) => this.job.id === itemA.job.id
+        (itemA) => this.job.id === itemA.job.id,
       );
       if (new_job) {
         this.removed_order_products_list =
           this.removed_order_products_list.filter(
-            (itemA) => this.job.id !== itemA.product.id
+            (itemA) => this.job.id !== itemA.product.id,
           );
         new_job.price = this.job.price;
         new_job.duration = this.job.duration;
@@ -331,7 +352,7 @@ export class FormInvoiceComponent {
     if (this.isAddForm) {
       this.totalAmount -= this.job.duration * this.job.price;
       this.jobs_list = this.jobs_list.filter(
-        (itemA) => job.job_name !== itemA.job_name
+        (itemA) => job.job_name !== itemA.job_name,
       );
       this.job = {
         job_name: "",
@@ -342,7 +363,7 @@ export class FormInvoiceComponent {
     } else {
       this.removed_from_jobs_list.push(job);
       this.jobs_list = this.jobs_list.filter(
-        (itemA) => job.invoice_job_id !== itemA.invoice_job_id
+        (itemA) => job.invoice_job_id !== itemA.invoice_job_id,
       );
       // console.log(this.order_products_list);
       this.job = {
@@ -366,13 +387,13 @@ export class FormInvoiceComponent {
       };
     } else {
       const new_product_order = this.removed_order_products_list.find(
-        (itemA) => this.order_product.product.id === itemA.product.id
+        (itemA) => this.order_product.product.id === itemA.product.id,
       );
       // console.log(new_product_order);
       if (new_product_order) {
         this.removed_order_products_list =
           this.removed_order_products_list.filter(
-            (itemA) => this.order_product.product.id !== itemA.product.id
+            (itemA) => this.order_product.product.id !== itemA.product.id,
           );
         new_product_order.quantity = this.order_product.quantity;
         new_product_order.unit_price = this.order_product.unit_price;
@@ -394,7 +415,7 @@ export class FormInvoiceComponent {
       this.totalAmount -=
         this.order_product.quantity * this.order_product.unit_price;
       this.order_products_list = this.order_products_list.filter(
-        (itemA) => order_product.product.id !== itemA.product.id
+        (itemA) => order_product.product.id !== itemA.product.id,
       );
       this.order_product = {
         product: null,
@@ -404,7 +425,7 @@ export class FormInvoiceComponent {
     } else {
       this.removed_order_products_list.push(order_product);
       this.order_products_list = this.order_products_list.filter(
-        (itemA) => order_product.product.id !== itemA.product.id
+        (itemA) => order_product.product.id !== itemA.product.id,
       );
       // console.log(this.order_products_list);
       this.order_product = {
@@ -430,13 +451,13 @@ export class FormInvoiceComponent {
     if (this.isAddForm) {
       this.invoice_technician_list.push(this.invoice_technicians);
       this.totalAmount += this.calculateTotalTechnicianAmountHours(
-        this.invoice_technicians
+        this.invoice_technicians,
       );
       this.initInvoiceTechnician();
     } else {
       const new_service_order = this.removed_invoice_technician_list.find(
         (itemA) =>
-          this.invoice_technicians.technician.id === itemA.technician.id
+          this.invoice_technicians.technician.id === itemA.technician.id,
       );
 
       // console.log(new_product_order);
@@ -445,7 +466,7 @@ export class FormInvoiceComponent {
         this.removed_invoice_technician_list =
           this.removed_invoice_technician_list.filter(
             (itemA) =>
-              this.invoice_technicians.technician.id === itemA.technician.id
+              this.invoice_technicians.technician.id === itemA.technician.id,
           );
         new_service_order.normal_hour1 = this.invoice_technicians.normal_hour1;
         new_service_order.unit_price = this.invoice_service.unit_price;
@@ -464,13 +485,13 @@ export class FormInvoiceComponent {
       // console.log(invoice_technicians);
       // console.log(this.invoice_technician_list);
       this.invoice_technician_list = this.invoice_technician_list.filter(
-        (itemA) => invoice_technicians.technician.id !== itemA.technician.id
+        (itemA) => invoice_technicians.technician.id !== itemA.technician.id,
       );
       this.initInvoiceTechnician();
     } else {
       this.removed_invoice_technician_list.push(invoice_technicians);
       this.invoice_technician_list = this.invoice_technician_list.filter(
-        (itemA) => invoice_technicians.technician.id !== itemA.technician.id
+        (itemA) => invoice_technicians.technician.id !== itemA.technician.id,
       );
       this.initInvoiceTechnician();
     }

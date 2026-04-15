@@ -11,7 +11,7 @@ import { catchError, Observable, throwError } from "rxjs";
 @Injectable({
   providedIn: "root",
 })
-export class CashManagementService {
+export class CashRegisterService {
   private apiUrl = APP_CONSTANTS.API_BASE_URL;
 
   private headers = new HttpHeaders({
@@ -25,7 +25,7 @@ export class CashManagementService {
   ) {}
 
   getCashRegisters(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/cash/`, {
+    return this.http.get<any[]>(`${this.apiUrl}/cash/register/history`, {
       headers: this.headers,
     });
   }
@@ -36,14 +36,17 @@ export class CashManagementService {
     });
   }
 
-  getCashRegisterTransactions(cash_id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/cash/transactions/${cash_id}`, {
-      headers: this.headers,
-    });
+  getCashRegisterTransactions(register_id: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/cash/transactions/register/${register_id}`,
+      {
+        headers: this.headers,
+      },
+    );
   }
 
   getOpenedCashRegister(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cash/opened_register`, {
+    return this.http.get<any>(`${this.apiUrl}/cash/register/current`, {
       headers: this.headers,
     });
   }
@@ -61,7 +64,7 @@ export class CashManagementService {
   }
 
   saveDailyCashDesk(data: any) {
-    return this.http.post<any>(`${this.apiUrl}/cash/create/`, data, {
+    return this.http.post<any>(`${this.apiUrl}/cash/register/open`, data, {
       headers: this.headers,
       reportProgress: true,
       observe: "response",
@@ -70,7 +73,7 @@ export class CashManagementService {
 
   saveTransaction(transaction: any) {
     return this.http.post<any>(
-      `${this.apiUrl}/cash/transactions/create/`,
+      `${this.apiUrl}/cash/register/transaction/`,
       transaction,
       {
         headers: this.headers,
@@ -106,7 +109,7 @@ export class CashManagementService {
   openRegister(opening_balance: number) {
     return this.http
       .post<any>(
-        `${this.apiUrl}/cash/open?opening_balance=${opening_balance}`,
+        `${this.apiUrl}/cash/register/open`,
         {},
         {
           headers: this.headers,
@@ -119,10 +122,10 @@ export class CashManagementService {
       );
   }
 
-  reopenRegister(cash_id: number) {
+  reopenRegister(register_id: number) {
     return this.http
-      .post<any>(
-        `${this.apiUrl}/cash/reopen?cash_id=${cash_id}`,
+      .put<any>(
+        `${this.apiUrl}/cash/register/${register_id}/reopen`,
         {},
         {
           headers: this.headers,
@@ -135,10 +138,13 @@ export class CashManagementService {
       );
   }
 
-  closeRegister() {
+  closeRegister(closing_balance: number) {
+    let payload = {
+      closing_balance: closing_balance,
+    };
     return this.http.post<any>(
-      `${this.apiUrl}/cash/close/`,
-      {},
+      `${this.apiUrl}/cash/register/close?user_id=1`,
+      payload,
       {
         headers: this.headers,
         reportProgress: true,

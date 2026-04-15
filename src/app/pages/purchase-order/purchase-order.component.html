@@ -60,6 +60,14 @@
                         class="waves-effect waves-light btn btn-small"
                         title="Edit purchase order"
                         (click)="edit(item)"
+                        *ngIf="!item.status"
+                        ><i class="material-icons">edit</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small disabled-link"
+                        title="Edit purchase order"
+                        (click)="edit(item)"
+                        *ngIf="item.status"
                         ><i class="material-icons">edit</i></a
                       >
                       <a
@@ -72,6 +80,14 @@
                         class="waves-effect waves-light btn btn-small red darken-4"
                         title="Delete client"
                         (click)="confirmDelete(item)"
+                        *ngIf="!item.status"
+                        ><i class="material-icons">delete</i></a
+                      >
+                      <a
+                        class="waves-effect waves-light btn btn-small red darken-4 disabled-link"
+                        title="Delete client"
+                        (click)="confirmDelete(item)"
+                        *ngIf="item.status"
                         ><i class="material-icons">delete</i></a
                       >
                     </div>
@@ -118,6 +134,32 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Delete Purchase order -->
+  <div id="confirmDelete" class="modal">
+    <div class="modal-content">
+      <h4 class="center red-text">Confirm purchase order delete?</h4>
+      <p *ngIf="poToDelete" class="center teal-text darken-4">
+        {{ poToDelete.reference }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat red left white-text"
+        (click)="closeModal()"
+      >
+        No
+      </button>
+      <button
+        type="button"
+        class="modal-close waves-effect waves-green btn-flat right green white-text"
+        (click)="delete()"
+      >
+        Yes
+      </button>
     </div>
   </div>
 </main>

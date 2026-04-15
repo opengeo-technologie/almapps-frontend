@@ -7,6 +7,7 @@ import { FormsModule } from "@angular/forms";
 import { CompanyDetailService } from "../../services/company-detail.service";
 import { InvoiceService } from "../../services/invoice.service";
 import { CustomCurrencyPipe } from "../../pipes/currency.pipe";
+import { AuthService } from "../../services/auth.service";
 declare var M: any;
 
 @Component({
@@ -54,6 +55,8 @@ export class InvoicesComponent {
   newTechModal: any;
   private navSub?: Subscription;
   isAddForm: boolean = true;
+  itemToDelete: any = {};
+  user: any | undefined;
 
   currentPage = 1;
   rowsPerPage = 10;
@@ -62,7 +65,8 @@ export class InvoicesComponent {
     private router: Router,
     private apiService: InvoiceService,
     private companyService: CompanyDetailService,
-    @Inject(PLATFORM_ID) private platformId: object
+    private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     // this.user = JSON.parse(localStorage.getItem('user') || '{}');
     // this.userLocation = JSON.parse(localStorage.getItem('userLocation') || '{}');
@@ -86,6 +90,12 @@ export class InvoicesComponent {
         }
       });
     }
+
+    const userData = this.authService.getUser();
+    if (userData) {
+      // console.log(JSON.parse(userData));
+      this.user = JSON.parse(userData);
+    }
   }
 
   loadData() {
@@ -100,13 +110,11 @@ export class InvoicesComponent {
 
   initModals() {
     const elem = document.getElementById("confirmDelete");
-    const new_tech = document.getElementById("new_tech");
     // console.log(elem);
     const options = {
       dismissible: false,
     };
     this.instanceModal = M.Modal.init(elem, options);
-    this.newTechModal = M.Modal.init(new_tech, options);
   }
 
   ngOnDestroy() {
@@ -150,8 +158,8 @@ export class InvoicesComponent {
     this.router.navigate(["/invoices/print", item.id]);
   }
 
-  confirmDelete(tech: any) {
-    this.techToDelete = tech;
+  confirmDelete(item: any) {
+    this.itemToDelete = item;
     this.instanceModal.open();
   }
 
@@ -207,7 +215,28 @@ export class InvoicesComponent {
 
   calculateTotal(invoice: any): number {
     return Math.round(
-      this.calculateTotalWithouxVAT(invoice) + this.calculateVATAmount(invoice)
+      this.calculateTotalWithouxVAT(invoice) + this.calculateVATAmount(invoice),
     );
+  }
+
+  delete() {
+    this.itemToDelete.on_delete = true;
+    this.itemToDelete.user_id_del = true;
+    this.apiService.updateInvoice(this.itemToDelete).subscribe({
+      next: (data) => {
+        // console.log(data);
+        if (data.status == 206) {
+          // Handle the response from the server
+          M.toast({
+            html: `Invoice reference ${this.itemToDelete.reference} deleted successfully....`,
+            classes: "rounded red accent-4",
+            inDuration: 500,
+            outDuration: 575,
+          });
+          this.loadData();
+        }
+      },
+      error: (err) => console.error(err),
+    });
   }
 }

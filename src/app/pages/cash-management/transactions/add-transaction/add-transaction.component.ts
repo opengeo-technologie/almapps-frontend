@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BaseComponent } from "../../../base/base.component";
 import { FormTransactionComponent } from "../form-transaction/form-transaction.component";
 import { AuthService } from "../../../../services/auth.service";
-import { CashManagementService } from "../../../../services/cash-management.service";
+import { CashRegisterService } from "../../../../services/cash-register.service";
 
 @Component({
   selector: "app-add-transaction",
@@ -37,7 +37,7 @@ export class AddTransactionComponent {
 
   constructor(
     private authService: AuthService,
-    private cashService: CashManagementService
+    private cashService: CashRegisterService,
   ) {
     const userData = this.authService.getUser();
     if (userData) {

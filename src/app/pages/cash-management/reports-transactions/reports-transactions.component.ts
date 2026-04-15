@@ -16,6 +16,7 @@ import { color } from "html2canvas/dist/types/css/types/color";
 import { textDecorationLine } from "html2canvas/dist/types/css/property-descriptors/text-decoration-line";
 import { AuthService } from "../../../services/auth.service";
 import { CompanyDetailService } from "../../../services/company-detail.service";
+import { CashRegisterService } from "../../../services/cash-register.service";
 
 @Component({
   selector: "app-reports-transactions",
@@ -59,7 +60,7 @@ export class ReportsTransactionsComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private apiService: CashManagementService,
+    private apiService: CashRegisterService,
     private companyService: CompanyDetailService,
     private imageHelper: ImageHelperService,
     private datePipe: DatePipe,
@@ -152,7 +153,7 @@ export class ReportsTransactionsComponent {
       this.register.date,
       "dd/MM/yyyy",
     );
-    widths = ["auto", "*", "auto", "auto", "auto"];
+    widths = ["auto", "*", "auto", "*", "*"];
     body = [
       [
         { text: "#", bold: true, fontSize: 11 },
@@ -407,7 +408,7 @@ export class ReportsTransactionsComponent {
           { text: "", margin: [0, 30, 0, 0] },
           this.buildClosingStatsTable(),
           {
-            text: `Amount in leters: ${this.currencyWordPipe.transform(
+            text: `Amount in letters: ${this.currencyWordPipe.transform(
               this.calculateClosingBalance(),
             )} FCFA`,
             margin: [0, 15, 0, 0],

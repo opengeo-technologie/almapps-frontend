@@ -15,14 +15,17 @@ export class PaymentService {
     // Authorization: `Token ${localStorage.getItem("token")}`,
   });
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   generateNextReference(): Observable<any> {
     return this.http.get<any>(
       `${this.apiUrl}/generate-code/next-reference-payment/`,
       {
         headers: this.headers,
-      }
+      },
     );
   }
 
@@ -62,28 +65,28 @@ export class PaymentService {
     });
   }
 
-  savePayment(tech: any) {
-    return this.http.post<any>(`${this.apiUrl}/payments/create/`, tech, {
+  savePayment(item: any) {
+    return this.http.post<any>(`${this.apiUrl}/payments/create/`, item, {
       headers: this.headers,
       reportProgress: true,
       observe: "response",
     });
   }
 
-  updatePayment(tech: any) {
+  updatePayment(item: any) {
     return this.http.put<any>(
-      `${this.apiUrl}/payments/update/${tech.id}/`,
-      tech,
+      `${this.apiUrl}/payments/update/${item.id}/`,
+      item,
       {
         headers: this.headers,
         reportProgress: true,
         observe: "response",
-      }
+      },
     );
   }
 
-  deletePayment(tech: any) {
-    return this.http.delete<any>(`${this.apiUrl}/payments/delete/${tech.id}/`, {
+  deletePayment(item: any) {
+    return this.http.delete<any>(`${this.apiUrl}/payments/delete/${item.id}/`, {
       headers: this.headers,
       reportProgress: true,
       observe: "response",
